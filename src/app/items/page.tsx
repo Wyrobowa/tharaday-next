@@ -1,6 +1,6 @@
 'use client';
 
-import { Box, Button, Text, Card, CardHeader, CardContent } from 'ds-creator';
+import { Box, Button, Text, Card, CardHeader, CardContent } from '@wyrobowa/design-system';
 
 import { ItemForm } from './_components/ItemForm';
 import { ItemGrid } from './_components/ItemGrid';

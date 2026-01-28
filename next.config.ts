@@ -3,7 +3,7 @@ import type { NextConfig } from 'next';
 const nextConfig: NextConfig = {
   /* config options here */
   reactCompiler: true,
-  transpilePackages: ['ds-creator'],
+  transpilePackages: ['@wyrobowa/ds-creator'],
   typescript: {
     ignoreBuildErrors: false,
   },

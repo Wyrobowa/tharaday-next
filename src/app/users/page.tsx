@@ -1,6 +1,6 @@
 'use client';
 
-import { Box, Button, Text } from 'ds-creator';
+import { Box, Button, Text } from '@wyrobowa/design-system';
 
 import { UserModal } from './_components/UserModal';
 import { UserTable } from './_components/UserTable';

@@ -1,6 +1,6 @@
 'use client';
 
-import { Box, Card, CardHeader, CardContent, Text, Badge, Button, Loader } from 'ds-creator';
+import { Box, Card, CardHeader, CardContent, Text, Badge, Button, Loader } from '@wyrobowa/design-system';
 
 import { ItemGridProps } from '@/app/items/_components/ItemGrid.types';
 import { getStatusBadgeIntent } from '@/helpers/status';

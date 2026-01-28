@@ -1,6 +1,6 @@
 'use client';
 
-import { DashboardLayout, Breadcrumbs, BreadcrumbItem, Text } from 'ds-creator';
+import { DashboardLayout, Breadcrumbs, BreadcrumbItem, Text } from '@wyrobowa/design-system';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { ReactNode, useState } from 'react';

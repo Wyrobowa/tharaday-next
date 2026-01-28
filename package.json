@@ -11,10 +11,10 @@
   },
   "dependencies": {
     "@neondatabase/serverless": "^1.0.2",
-    "ds-creator": "file:../ds-creator",
-    "next": "16.1.3",
-    "react": "19.2.3",
-    "react-dom": "19.2.3"
+    "@wyrobowa/design-system": "file:../ds-creator/design-system",
+    "next": "^16.1.6",
+    "react": "19.2.4",
+    "react-dom": "19.2.4"
   },
   "devDependencies": {
     "@types/node": "^20",
@@ -22,7 +22,7 @@
     "@types/react-dom": "^19",
     "babel-plugin-react-compiler": "1.0.0",
     "eslint": "^9",
-    "eslint-config-next": "16.1.3",
+    "eslint-config-next": "16.1.4",
     "typescript": "^5"
   }
 }

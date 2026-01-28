@@ -1,6 +1,6 @@
 'use client';
 
-import { Button, Card, CardHeader, CardContent, Text, Badge, Box } from 'ds-creator';
+import { Button, Card, CardHeader, CardContent, Text, Badge, Box } from '@wyrobowa/design-system';
 import Link from 'next/link';
 
 export default function Home() {

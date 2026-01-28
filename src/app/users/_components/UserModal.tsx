@@ -1,6 +1,6 @@
 'use client';
 
-import { Box, Button, Modal } from 'ds-creator';
+import { Box, Button, Modal } from '@wyrobowa/design-system';
 
 import { UserModalProps } from '@/app/users/_components/UserModal.types';
 

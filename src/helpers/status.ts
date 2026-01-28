@@ -1,4 +1,4 @@
-import { BadgeIntent } from '../../../ds-creator';
+import { BadgeIntent } from '@wyrobowa/design-system';
 
 export const getStatusBadgeIntent = (status: string): BadgeIntent => {
     switch (status) {
