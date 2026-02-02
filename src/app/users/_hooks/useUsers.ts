@@ -22,7 +22,7 @@ export function useUsers() {
       role_id: '',
       status_id: '',
     }),
-    []
+    [],
   );
   const [form, setForm] = useState<UserFormType>(initialForm);
 
@@ -103,24 +103,27 @@ export function useUsers() {
     setIsAddModalOpen(true);
   }, [initialForm, setForm, setIsAddModalOpen]);
 
-  const openEditModal = useCallback((user: UserRow) => {
-    setEditingUser(user);
-    setForm({
-      name: user.name,
-      email: user.email,
-      role_id: user.role_id || '',
-      status_id: user.status_id || '',
-    });
-    setIsEditModalOpen(true);
-  }, [setEditingUser, setForm, setIsEditModalOpen]);
+  const openEditModal = useCallback(
+    (user: UserRow) => {
+      setEditingUser(user);
+      setForm({
+        name: user.name,
+        email: user.email,
+        role_id: user.role_id || '',
+        status_id: user.status_id || '',
+      });
+      setIsEditModalOpen(true);
+    },
+    [setEditingUser, setForm, setIsEditModalOpen],
+  );
 
   const closeAddModal = useCallback(
     () => setIsAddModalOpen(false),
-    [setIsAddModalOpen]
+    [setIsAddModalOpen],
   );
   const closeEditModal = useCallback(
     () => setIsEditModalOpen(false),
-    [setIsEditModalOpen]
+    [setIsEditModalOpen],
   );
 
   useEffect(() => {
