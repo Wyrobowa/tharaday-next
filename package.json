@@ -6,7 +6,7 @@
     "dev": "next dev --webpack",
     "build": "next build --webpack",
     "build:no-types": "TSC_COMPILE_ON_ERROR=true next build --webpack",
-    "export": "next build --webpack && next export",
+    "export": "next build --webpack",
     "start": "next start",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
