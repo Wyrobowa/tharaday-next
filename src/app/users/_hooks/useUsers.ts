@@ -1,7 +1,7 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 
 import { Role, Status, UserRow } from '@/app/users/types';
-import { apiDelete, apiGet, apiPatch, apiPost } from '@/lib/api';
+import { apiGet, apiPatch, apiPost } from '@/lib/api';
 
 import { UserFormType } from '../_components/UserForm.types';
 
@@ -10,12 +10,20 @@ export function useUsers() {
   const [statuses, setStatuses] = useState<Status[]>([]);
   const [users, setUsers] = useState<UserRow[]>([]);
   const [isLoading, setIsLoading] = useState(false);
-  
+
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [editingUser, setEditingUser] = useState<UserRow | null>(null);
 
-  const initialForm: UserFormType = { name: '', email: '', role_id: '', status_id: '' };
+  const initialForm = useMemo<UserFormType>(
+    () => ({
+      name: '',
+      email: '',
+      role_id: '',
+      status_id: '',
+    }),
+    []
+  );
   const [form, setForm] = useState<UserFormType>(initialForm);
 
   const fetchUsers = async () => {
@@ -90,12 +98,12 @@ export function useUsers() {
     }
   };
 
-  const openAddModal = () => {
+  const openAddModal = useCallback(() => {
     setForm(initialForm);
     setIsAddModalOpen(true);
-  };
+  }, [initialForm, setForm, setIsAddModalOpen]);
 
-  const openEditModal = (user: UserRow) => {
+  const openEditModal = useCallback((user: UserRow) => {
     setEditingUser(user);
     setForm({
       name: user.name,
@@ -104,10 +112,16 @@ export function useUsers() {
       status_id: user.status_id || '',
     });
     setIsEditModalOpen(true);
-  };
+  }, [setEditingUser, setForm, setIsEditModalOpen]);
 
-  const closeAddModal = () => setIsAddModalOpen(false);
-  const closeEditModal = () => setIsEditModalOpen(false);
+  const closeAddModal = useCallback(
+    () => setIsAddModalOpen(false),
+    [setIsAddModalOpen]
+  );
+  const closeEditModal = useCallback(
+    () => setIsEditModalOpen(false),
+    [setIsEditModalOpen]
+  );
 
   useEffect(() => {
     (async () => {
@@ -116,7 +130,7 @@ export function useUsers() {
         const [rolesData, statusesData, usersData] = await Promise.all([
           apiGet<Role[]>('/api/roles'),
           apiGet<Status[]>('/api/statuses'),
-          apiGet<UserRow[]>('/api/users')
+          apiGet<UserRow[]>('/api/users'),
         ]);
         setRoles(rolesData);
         setStatuses(statusesData);

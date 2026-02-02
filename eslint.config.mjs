@@ -1,19 +1,25 @@
-import { defineConfig, globalIgnores } from "eslint/config";
-import nextVitals from "eslint-config-next/core-web-vitals";
-import nextTs from "eslint-config-next/typescript";
+import { defineConfig, globalIgnores } from 'eslint/config';
+import nextVitals from 'eslint-config-next/core-web-vitals';
+import nextTs from 'eslint-config-next/typescript';
+import prettierConfig from 'eslint-config-prettier';
+import prettierPlugin from 'eslint-plugin-prettier';
 
 const eslintConfig = defineConfig([
   ...nextVitals,
   ...nextTs,
+  prettierConfig,
   // Override default ignores of eslint-config-next.
   globalIgnores([
     // Default ignores of eslint-config-next:
-    ".next/**",
-    "out/**",
-    "build/**",
-    "next-env.d.ts",
+    '.next/**',
+    'out/**',
+    'build/**',
+    'next-env.d.ts',
   ]),
   {
+    plugins: {
+      prettier: prettierPlugin,
+    },
     rules: {
       'import/order': [
         'error',
@@ -23,17 +29,7 @@ const eslintConfig = defineConfig([
           alphabetize: { order: 'asc', caseInsensitive: true },
         },
       ],
-      'no-multiple-empty-lines': ['error', { max: 1, maxBOF: 0, maxEOF: 0 }],
-      'object-curly-spacing': ['error', 'always'],
-      'padding-line-between-statements': [
-        'error',
-        { blankLine: 'always', prev: '*', next: 'return' },
-      ],
-      quotes: ['error', 'single', { avoidEscape: true }],
-      'react/jsx-first-prop-new-line': ['error', 'multiline'],
-      'react/jsx-indent': ['error', 2],
-      'react/jsx-indent-props': ['error', 2],
-      semi: ['error', 'always'],
+      'prettier/prettier': 'error',
     },
   },
 ]);

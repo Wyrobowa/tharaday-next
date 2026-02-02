@@ -4,7 +4,13 @@ import { Box, Input, Select, SelectOption } from 'tharaday';
 
 import { ItemFormProps } from './ItemForm.types';
 
-export function ItemForm({ form, setForm, itemTypes, statuses, priorities }: ItemFormProps) {
+export function ItemForm({
+  form,
+  setForm,
+  itemTypes,
+  statuses,
+  priorities,
+}: ItemFormProps) {
   const typeOptions: SelectOption[] = itemTypes.map((t) => ({
     value: t.id,
     label: t.name,
@@ -16,8 +22,8 @@ export function ItemForm({ form, setForm, itemTypes, statuses, priorities }: Ite
   }));
 
   const prioritiesOptions: SelectOption[] = priorities.map((p) => ({
-      value: p.id,
-      label: p.name,
+    value: p.id,
+    label: p.name,
   }));
 
   return (
@@ -32,22 +38,43 @@ export function ItemForm({ form, setForm, itemTypes, statuses, priorities }: Ite
       <Select
         label="Type"
         value={form.type_id}
-        onChange={(e) => setForm({ ...form, type_id: e.target.value === '' ? '' : Number(e.target.value) })}
+        onChange={(e) =>
+          setForm({
+            ...form,
+            type_id: e.target.value === '' ? '' : Number(e.target.value),
+          })
+        }
         options={[{ value: '', label: '--- Select type ---' }, ...typeOptions]}
         required
       />
       <Select
         label="Status"
         value={form.status_id}
-        onChange={(e) => setForm({ ...form, status_id: e.target.value === '' ? '' : Number(e.target.value) })}
-        options={[{ value: '', label: '--- Select status ---' }, ...statusOptions]}
+        onChange={(e) =>
+          setForm({
+            ...form,
+            status_id: e.target.value === '' ? '' : Number(e.target.value),
+          })
+        }
+        options={[
+          { value: '', label: '--- Select status ---' },
+          ...statusOptions,
+        ]}
         required
       />
       <Select
         label="Priority"
         value={form.priority_id}
-        onChange={(e) => setForm({ ...form, priority_id: e.target.value === '' ? '' : Number(e.target.value) })}
-        options={[{ value: '', label: '--- Select priority ---' }, ...prioritiesOptions]}
+        onChange={(e) =>
+          setForm({
+            ...form,
+            priority_id: e.target.value === '' ? '' : Number(e.target.value),
+          })
+        }
+        options={[
+          { value: '', label: '--- Select priority ---' },
+          ...prioritiesOptions,
+        ]}
         required
       />
     </Box>

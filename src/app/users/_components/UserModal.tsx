@@ -27,12 +27,26 @@ export function UserModal({
       isLoading={isLoading}
       footer={
         <Box display="flex" gap={4} justifyContent="flex-end">
-          <Button variant="outline" onClick={onClose} disabled={isLoading}>Cancel</Button>
-          <Button variant="solid" intent="info" onClick={onSubmit} disabled={isLoading}>{isLoading ? 'Saving...' : submitLabel}</Button>
+          <Button variant="outline" onClick={onClose} disabled={isLoading}>
+            Cancel
+          </Button>
+          <Button
+            variant="solid"
+            intent="info"
+            onClick={onSubmit}
+            disabled={isLoading}
+          >
+            {isLoading ? 'Saving...' : submitLabel}
+          </Button>
         </Box>
       }
     >
-      <UserForm form={form} setForm={setForm} roles={roles} statuses={statuses} />
+      <UserForm
+        form={form}
+        setForm={setForm}
+        roles={roles}
+        statuses={statuses}
+      />
     </Modal>
   );
 }

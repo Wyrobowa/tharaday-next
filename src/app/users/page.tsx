@@ -27,18 +27,20 @@ export default function UsersPage() {
 
   return (
     <Box paddingY={8}>
-      <Box 
-        display="flex" 
-        justifyContent="space-between" 
-        alignItems="center" 
+      <Box
+        display="flex"
+        justifyContent="space-between"
+        alignItems="center"
         paddingBottom={8}
       >
         <Box display="flex" alignItems="center" gap={4}>
-          <Text variant="h1" weight="bold">Users Directory</Text>
+          <Text variant="h1" weight="bold">
+            Users Directory
+          </Text>
         </Box>
-        <Button 
-          variant="solid" 
-          intent="info" 
+        <Button
+          variant="solid"
+          intent="info"
           onClick={openAddModal}
           disabled={isLoading}
         >

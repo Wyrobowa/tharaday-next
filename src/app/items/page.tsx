@@ -25,13 +25,10 @@ export default function ItemsPage() {
 
   return (
     <Box paddingY={8}>
-      <Box 
-        display="flex" 
-        flexDirection="column" 
-        gap={2}
-        paddingBottom={8}
-      >
-        <Text variant="h1" weight="bold">Tasks list</Text>
+      <Box display="flex" flexDirection="column" gap={2} paddingBottom={8}>
+        <Text variant="h1" weight="bold">
+          Tasks list
+        </Text>
         <Text variant="body-md" color="subtle">
           TO-DO like list
         </Text>
@@ -44,27 +41,31 @@ export default function ItemsPage() {
             <CardHeader title={editingItem ? 'Edit item' : 'Add new item'} />
             <CardContent>
               <Box display="flex" flexDirection="column" gap={6}>
-                <ItemForm 
-                  form={form} 
-                  setForm={setForm} 
-                  itemTypes={itemTypes} 
+                <ItemForm
+                  form={form}
+                  setForm={setForm}
+                  itemTypes={itemTypes}
                   statuses={statuses}
                   priorities={priorities}
                 />
                 <Box display="flex" gap={3}>
-                  <Button 
-                    variant="solid" 
-                    intent="info" 
+                  <Button
+                    variant="solid"
+                    intent="info"
                     fullWidth
                     onClick={editingItem ? handleEditItem : handleAddItem}
                     disabled={isLoading}
                   >
-                    {isLoading ? 'Processing...' : (editingItem ? 'Update' : 'Create')}
+                    {isLoading
+                      ? 'Processing...'
+                      : editingItem
+                        ? 'Update'
+                        : 'Create'}
                   </Button>
                   {editingItem && (
-                    <Button 
-                      variant="outline" 
-                      intent="neutral" 
+                    <Button
+                      variant="outline"
+                      intent="neutral"
                       onClick={handleCancelEdit}
                       disabled={isLoading}
                     >

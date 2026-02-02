@@ -1,15 +1,15 @@
 import { BadgeIntent } from 'tharaday';
 
 export const getStatusBadgeIntent = (status: string): BadgeIntent => {
-    switch (status) {
-        case 'active':
-            return 'success';
-        case 'suspended':
-            return 'warning';
-        case 'removed':
-            return 'danger';
-        case 'inactive':
-        default:
-            return 'neutral';
-    }
+  switch (status) {
+    case 'active':
+      return 'success';
+    case 'suspended':
+      return 'warning';
+    case 'removed':
+      return 'danger';
+    case 'inactive':
+    default:
+      return 'neutral';
+  }
 };

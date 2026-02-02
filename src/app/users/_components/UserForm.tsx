@@ -35,14 +35,24 @@ export function UserForm({ form, setForm, roles, statuses }: UserFormProps) {
       <Select
         label="Role"
         value={form.role_id}
-        onChange={(e) => setForm({ ...form, role_id: e.target.value === '' ? '' : Number(e.target.value) })}
+        onChange={(e) =>
+          setForm({
+            ...form,
+            role_id: e.target.value === '' ? '' : Number(e.target.value),
+          })
+        }
         options={[{ value: '', label: 'Select role' }, ...roleOptions]}
         required
       />
       <Select
         label="Status"
         value={form.status_id}
-        onChange={(e) => setForm({ ...form, status_id: e.target.value === '' ? '' : Number(e.target.value) })}
+        onChange={(e) =>
+          setForm({
+            ...form,
+            status_id: e.target.value === '' ? '' : Number(e.target.value),
+          })
+        }
         options={[{ value: '', label: 'Select status' }, ...statusOptions]}
         required
       />

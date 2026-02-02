@@ -5,11 +5,7 @@ import { usePathname } from 'next/navigation';
 import { ReactNode, useState } from 'react';
 import { DashboardLayout, Breadcrumbs, BreadcrumbItem, Text } from 'tharaday';
 
-export default function ClientLayout({
-  children,
-}: {
-  children: ReactNode;
-}) {
+export default function ClientLayout({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<{ name: string } | undefined>();
   const pathname = usePathname();
 
@@ -44,13 +40,28 @@ export default function ClientLayout({
       actions={
         <nav style={{ display: 'flex', gap: '1rem' }}>
           <Link href="/" style={{ textDecoration: 'none' }}>
-            <Text variant="label" weight={pathname === '/' ? 'bold' : 'regular'}>Home</Text>
+            <Text
+              variant="label"
+              weight={pathname === '/' ? 'bold' : 'regular'}
+            >
+              Home
+            </Text>
           </Link>
           <Link href="/users" style={{ textDecoration: 'none' }}>
-            <Text variant="label" weight={pathname === '/users' ? 'bold' : 'regular'}>Users</Text>
+            <Text
+              variant="label"
+              weight={pathname === '/users' ? 'bold' : 'regular'}
+            >
+              Users
+            </Text>
           </Link>
           <Link href="/items" style={{ textDecoration: 'none' }}>
-            <Text variant="label" weight={pathname === '/items' ? 'bold' : 'regular'}>Items</Text>
+            <Text
+              variant="label"
+              weight={pathname === '/items' ? 'bold' : 'regular'}
+            >
+              Items
+            </Text>
           </Link>
         </nav>
       }

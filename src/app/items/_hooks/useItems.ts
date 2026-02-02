@@ -12,11 +12,14 @@ export function useItems() {
   const [items, setItems] = useState<ItemRow[]>([]);
   const [isLoading, setIsLoading] = useState(false);
 
-  const [isAddModalOpen, setIsAddModalOpen] = useState(false);
-  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [editingItem, setEditingItem] = useState<ItemRow | null>(null);
 
-  const initialForm: ItemFormType = { name: '', type_id: '', status_id: 1, priority_id: 1 };
+  const initialForm: ItemFormType = {
+    name: '',
+    type_id: '',
+    status_id: 1,
+    priority_id: 1,
+  };
   const [form, setForm] = useState<ItemFormType>(initialForm);
 
   const fetchItems = async () => {
@@ -100,19 +103,17 @@ export function useItems() {
     });
   };
 
-  const closeAddModal = () => setIsAddModalOpen(false);
-  const closeEditModal = () => setIsEditModalOpen(false);
-
   useEffect(() => {
     (async () => {
       setIsLoading(true);
       try {
-        const [itemTypesData, statusesData, priorityData, itemsData] = await Promise.all([
-          apiGet<ItemType[]>('/api/item-types'),
-          apiGet<Status[]>('/api/statuses'),
-          apiGet<Priority[]>('/api/priorities'),
-          apiGet<ItemRow[]>('/api/items')
-        ]);
+        const [itemTypesData, statusesData, priorityData, itemsData] =
+          await Promise.all([
+            apiGet<ItemType[]>('/api/item-types'),
+            apiGet<Status[]>('/api/statuses'),
+            apiGet<Priority[]>('/api/priorities'),
+            apiGet<ItemRow[]>('/api/items'),
+          ]);
         setItemTypes(itemTypesData);
         setStatuses(statusesData);
         setPriorities(priorityData);
