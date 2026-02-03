@@ -1,5 +1,26 @@
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
+## GitHub Pages
+
+This repo is configured to deploy a static export to GitHub Pages via `pages.yml`.
+
+Requirements:
+- Set a GitHub Actions Variable: `NEXT_PUBLIC_API_BASE_URL` (e.g. `https://tharaday-vercel.vercel.app`).
+
+Notes:
+- The workflow auto-detects whether the repo is `*.github.io` (root site) or a project page and sets `basePath`/`assetPrefix` accordingly.
+- The output is generated with `next build` using `output: "export"` and deployed from the `out/` folder.
+
+## Configuration
+
+- `NEXT_PUBLIC_API_BASE_URL`: Public API base URL (set as a GitHub Actions Variable).
+
+## Deploy Checklist
+
+1) Set `NEXT_PUBLIC_API_BASE_URL` in GitHub Actions Variables.
+2) Push to `main`.
+3) Verify the Pages build in the Actions tab and visit the published URL.
+
 ## Getting Started
 
 First, run the development server:
@@ -29,8 +50,6 @@ To learn more about Next.js, take a look at the following resources:
 
 You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
 
-## Deploy on Vercel
+## Deploy
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+This project is deployed via GitHub Pages (see the section above).
