@@ -1,5 +1,6 @@
 'use client';
 
+import { useEffect, useMemo, useState } from 'react';
 import {
   Box,
   Button,
@@ -11,17 +12,21 @@ import {
   Select,
 } from 'tharaday';
 
-import { books } from '@/helpers/books';
-
-const checkoutItems = books.slice(0, 2);
+import { apiGet } from '@/lib/api';
+import { BookRecord } from '@/types/api';
 
 export default function CheckoutPage() {
-  const subtotal = checkoutItems.reduce(
-    (total, item) => total + Number.parseFloat(item.price.replace('$', '')),
-    0,
-  );
-  const shipping = 6.5;
-  const total = (subtotal + shipping).toFixed(2);
+  const [books, setBooks] = useState<BookRecord[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    apiGet<BookRecord[]>('/api/books')
+      .then((data) => setBooks(data))
+      .catch((err) => console.error(err))
+      .finally(() => setIsLoading(false));
+  }, []);
+
+  const checkoutItems = useMemo(() => books.slice(0, 2), [books]);
 
   return (
     <Box paddingY={8} display="flex" flexDirection="column" gap={8}>
@@ -100,41 +105,43 @@ export default function CheckoutPage() {
           <CardHeader title="Order review" />
           <CardContent>
             <Box display="flex" flexDirection="column" gap={4}>
-              {checkoutItems.map((item) => (
+              {checkoutItems.map((book) => (
                 <Box
-                  key={item.id}
+                  key={book.id}
                   display="flex"
                   justifyContent="space-between"
                 >
                   <Box>
                     <Text variant="body-md" weight="medium">
-                      {item.title}
+                      {book.name}
                     </Text>
                     <Text variant="body-sm" color="subtle">
-                      {item.author}
+                      {[book.author_first_name, book.author_last_name]
+                        .filter(Boolean)
+                        .join(' ') || 'Unknown author'}
                     </Text>
                   </Box>
                   <Text variant="body-md" weight="medium">
-                    {item.price}
+                    {book.status || 'Status'}
                   </Text>
                 </Box>
               ))}
               <Box display="flex" justifyContent="space-between">
-                <Text variant="body-md">Subtotal</Text>
+                <Text variant="body-md">Items</Text>
                 <Text variant="body-md" weight="medium">
-                  ${subtotal.toFixed(2)}
+                  {isLoading ? 'Loading...' : checkoutItems.length}
                 </Text>
               </Box>
               <Box display="flex" justifyContent="space-between">
-                <Text variant="body-md">Shipping</Text>
+                <Text variant="body-md">Pricing</Text>
                 <Text variant="body-md" weight="medium">
-                  ${shipping.toFixed(2)}
+                  Not available
                 </Text>
               </Box>
               <Box display="flex" justifyContent="space-between">
-                <Text variant="body-md">Total</Text>
+                <Text variant="body-md">Checkout status</Text>
                 <Text variant="body-md" weight="medium">
-                  ${total}
+                  Disabled
                 </Text>
               </Box>
               <Button variant="solid" intent="info" fullWidth disabled>

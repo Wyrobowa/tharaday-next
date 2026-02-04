@@ -2,18 +2,20 @@
 
 import { Box, Button, Text, Card, CardHeader, CardContent } from 'tharaday';
 
-import { ItemForm } from './_components/ItemForm';
-import { ItemGrid } from './_components/ItemGrid';
-import { useItems } from './_hooks/useItems';
+import { BookForm } from './_components/BookForm';
+import { BookGrid } from './_components/BookGrid';
+import { useBooks } from './_hooks/useBooks';
 
-export default function ItemsPage() {
+export default function BooksPage() {
   const {
-    itemTypes,
+    tags,
     statuses,
     priorities,
-    items,
+    authors,
+    publishers,
+    books,
     isLoading,
-    editingItem,
+    editingBook,
     form,
     setForm,
     handleAddItem,
@@ -21,7 +23,7 @@ export default function ItemsPage() {
     handleCancelEdit,
     handleDeleteItem,
     startEdit,
-  } = useItems();
+  } = useBooks();
 
   return (
     <Box paddingY={8}>
@@ -39,32 +41,34 @@ export default function ItemsPage() {
         <Box>
           <Card bordered shadow="sm">
             <CardHeader
-              title={editingItem ? 'Edit listing' : 'Add new listing'}
+              title={editingBook ? 'Edit listing' : 'Add new listing'}
             />
             <CardContent>
               <Box display="flex" flexDirection="column" gap={6}>
-                <ItemForm
+                <BookForm
                   form={form}
                   setForm={setForm}
-                  itemTypes={itemTypes}
+                  tags={tags}
                   statuses={statuses}
                   priorities={priorities}
+                  authors={authors}
+                  publishers={publishers}
                 />
                 <Box display="flex" gap={3}>
                   <Button
                     variant="solid"
                     intent="info"
                     fullWidth
-                    onClick={editingItem ? handleEditItem : handleAddItem}
+                    onClick={editingBook ? handleEditItem : handleAddItem}
                     disabled={isLoading}
                   >
                     {isLoading
                       ? 'Processing...'
-                      : editingItem
+                      : editingBook
                         ? 'Update listing'
                         : 'Create listing'}
                   </Button>
-                  {editingItem && (
+                  {editingBook && (
                     <Button
                       variant="outline"
                       intent="neutral"
@@ -82,9 +86,9 @@ export default function ItemsPage() {
 
         {/* Right Side: List */}
         <Box>
-          <ItemGrid
-            items={items}
-            editingItem={editingItem}
+          <BookGrid
+            books={books}
+            editingBook={editingBook}
             isLoading={isLoading}
             onEdit={startEdit}
             onDelete={handleDeleteItem}

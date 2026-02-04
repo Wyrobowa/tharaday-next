@@ -11,18 +11,18 @@ import {
   Loader,
 } from 'tharaday';
 
-import { ItemGridProps } from '@/app/admin/books/_components/ItemGrid.types';
+import { BookGridProps } from '@/app/admin/books/_components/BookGrid.types';
 import { getStatusBadgeIntent } from '@/helpers/status';
 import { capitalizeFirstLetter } from '@/helpers/text';
 
-export function ItemGrid({
-  items,
-  editingItem,
+export function BookGrid({
+  books,
+  editingBook,
   isLoading,
   onEdit,
   onDelete,
-}: ItemGridProps) {
-  if (isLoading && items.length === 0) {
+}: BookGridProps) {
+  if (isLoading && books.length === 0) {
     return (
       <Box display="flex" justifyContent="center" padding={12}>
         <Loader size="lg" />
@@ -30,7 +30,7 @@ export function ItemGrid({
     );
   }
 
-  const isEditingItem = (id: number) => editingItem?.id === id;
+  const isEditingItem = (id: number) => editingBook?.id === id;
 
   return (
     <Box
@@ -42,14 +42,14 @@ export function ItemGrid({
         pointerEvents: isLoading ? 'none' : 'auto',
       }}
     >
-      {items.map((item) => (
+      {books.map((book) => (
         <Card
-          key={item.id}
+          key={book.id}
           bordered
-          shadow={isEditingItem(item.id) ? 'md' : 'sm'}
-          borderColor={isEditingItem(item.id) ? 'main' : 'subtle'}
+          shadow={isEditingItem(book.id) ? 'md' : 'sm'}
+          borderColor={isEditingItem(book.id) ? 'main' : 'subtle'}
         >
-          <CardHeader title={item.name} />
+          <CardHeader title={book.name} />
           <CardContent>
             <Box display="flex" flexDirection="column" gap={4}>
               <Box
@@ -58,10 +58,48 @@ export function ItemGrid({
                 alignItems="center"
               >
                 <Text variant="body-sm" color="subtle">
-                  Type
+                  Tag
                 </Text>
                 <Text variant="body-md" weight="medium">
-                  {capitalizeFirstLetter(item.type || '')}
+                  {capitalizeFirstLetter(book.type || '')}
+                </Text>
+              </Box>
+              <Box
+                display="flex"
+                justifyContent="space-between"
+                alignItems="center"
+              >
+                <Text variant="body-sm" color="subtle">
+                  Author
+                </Text>
+                <Text variant="body-md" weight="medium">
+                  {[book.author_first_name, book.author_last_name]
+                    .filter(Boolean)
+                    .join(' ') || 'Unknown'}
+                </Text>
+              </Box>
+              <Box
+                display="flex"
+                justifyContent="space-between"
+                alignItems="center"
+              >
+                <Text variant="body-sm" color="subtle">
+                  Publisher
+                </Text>
+                <Text variant="body-md" weight="medium">
+                  {book.publisher || 'Unknown'}
+                </Text>
+              </Box>
+              <Box
+                display="flex"
+                justifyContent="space-between"
+                alignItems="center"
+              >
+                <Text variant="body-sm" color="subtle">
+                  Pages
+                </Text>
+                <Text variant="body-md" weight="medium">
+                  {book.pages ?? '—'}
                 </Text>
               </Box>
               <Box
@@ -73,10 +111,10 @@ export function ItemGrid({
                   Status
                 </Text>
                 <Badge
-                  intent={getStatusBadgeIntent(item.status)}
+                  intent={getStatusBadgeIntent(book.status || '')}
                   variant="subtle"
                 >
-                  {capitalizeFirstLetter(item.status)}
+                  {capitalizeFirstLetter(book.status || '')}
                 </Badge>
               </Box>
               <Box
@@ -89,15 +127,15 @@ export function ItemGrid({
                 </Text>
                 <Badge
                   intent={
-                    item.priority === 'high'
+                    book.priority === 'high'
                       ? 'danger'
-                      : item.priority === 'medium'
+                      : book.priority === 'medium'
                         ? 'warning'
                         : 'info'
                   }
                   variant="subtle"
                 >
-                  {capitalizeFirstLetter(item.priority || 'medium')}
+                  {capitalizeFirstLetter(book.priority || 'medium')}
                 </Badge>
               </Box>
               <Box display="flex" gap={2} paddingTop={4}>
@@ -107,7 +145,7 @@ export function ItemGrid({
                     variant="outline"
                     intent="neutral"
                     fullWidth
-                    onClick={() => onEdit(item)}
+                    onClick={() => onEdit(book)}
                   >
                     Edit
                   </Button>
@@ -118,7 +156,7 @@ export function ItemGrid({
                     variant="outline"
                     intent="danger"
                     fullWidth
-                    onClick={() => onDelete(item.id)}
+                    onClick={() => onDelete(book.id)}
                   >
                     Delete
                   </Button>

@@ -17,14 +17,7 @@ import {
 import { getStatusBadgeIntent } from '@/helpers/status';
 import { capitalizeFirstLetter } from '@/helpers/text';
 
-import { UserRow } from '../types';
-
-interface UserTableProps {
-  users: UserRow[];
-  isLoading?: boolean;
-  onEdit: (user: UserRow) => void;
-  onDelete: (id: number) => void;
-}
+import { UserTableProps } from './UserTable.types';
 
 export function UserTable({
   users,
@@ -63,10 +56,10 @@ export function UserTable({
                 <TableCell>{capitalizeFirstLetter(user.role || '')}</TableCell>
                 <TableCell>
                   <Badge
-                    intent={getStatusBadgeIntent(user.status)}
+                    intent={getStatusBadgeIntent(user.status || '')}
                     variant="subtle"
                   >
-                    {capitalizeFirstLetter(user.status)}
+                    {capitalizeFirstLetter(user.status || '')}
                   </Badge>
                 </TableCell>
                 <TableCell>

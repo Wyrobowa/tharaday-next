@@ -1,11 +1,33 @@
 'use client';
 
 import Link from 'next/link';
+import { useEffect, useMemo, useState } from 'react';
 import { Box, Button, Card, CardContent, Text, Badge } from 'tharaday';
 
-import { books, featuredGenres } from '@/helpers/books';
+import { apiGet } from '@/lib/api';
+import { BookRecord } from '@/types/api';
 
 export default function BrowsePage() {
+  const [books, setBooks] = useState<BookRecord[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    apiGet<BookRecord[]>('/api/books')
+      .then((data) => setBooks(data))
+      .catch((err) => console.error(err))
+      .finally(() => setIsLoading(false));
+  }, []);
+
+  const featuredGenres = useMemo(() => {
+    const tagSet = new Set<string>();
+    books.forEach((book) => {
+      if (book.type) {
+        tagSet.add(book.type);
+      }
+    });
+    return Array.from(tagSet);
+  }, [books]);
+
   return (
     <Box paddingY={8} display="flex" flexDirection="column" gap={8}>
       <Box display="flex" flexDirection="column" gap={2}>
@@ -89,7 +111,9 @@ export default function BrowsePage() {
             alignItems="center"
           >
             <Text variant="body-md" color="subtle">
-              Showing {books.length} results
+              {isLoading
+                ? 'Loading listings...'
+                : `Showing ${books.length} results`}
             </Text>
             <Button variant="outline" intent="neutral" disabled>
               Sort: Popular
@@ -107,18 +131,22 @@ export default function BrowsePage() {
                   <Box display="flex" flexDirection="column" gap={3}>
                     <Box>
                       <Text variant="body-md" weight="medium">
-                        {book.title}
+                        {book.name}
                       </Text>
                       <Text variant="body-sm" color="subtle">
-                        {book.author}
+                        {[book.author_first_name, book.author_last_name]
+                          .filter(Boolean)
+                          .join(' ') || 'Unknown author'}
                       </Text>
                     </Box>
                     <Box display="flex" gap={2} flexWrap="wrap">
-                      <Badge intent="info">{book.genre}</Badge>
-                      <Badge intent="success">{book.format}</Badge>
+                      <Badge intent="info">{book.type || 'Tag'}</Badge>
+                      <Badge intent="success">{book.status || 'Status'}</Badge>
                     </Box>
                     <Text variant="body-sm" color="subtle">
-                      {book.condition} · {book.rating}★
+                      {book.priority
+                        ? `Priority: ${book.priority}`
+                        : 'Priority: -'}
                     </Text>
                     <Box
                       display="flex"
@@ -126,7 +154,7 @@ export default function BrowsePage() {
                       alignItems="center"
                     >
                       <Text variant="body-md" weight="medium">
-                        {book.price}
+                        {book.publisher || 'Publisher'}
                       </Text>
                       <Link href={`/book/${book.id}`}>
                         <Button variant="outline" intent="neutral">

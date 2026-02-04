@@ -9,22 +9,62 @@ import {
   Badge,
 } from 'tharaday';
 
-import { books } from '@/helpers/books';
+import { BookRecord } from '@/types/api';
 
 type BookDetailPageProps = {
   params: Promise<{ id: string }>;
 };
 
+export const dynamic = 'force-static';
+export const dynamicParams = false;
+
 export async function generateStaticParams() {
-  return books.map((book) => ({ id: book.id }));
+  // Fallback so static export always has at least one param even if API is unavailable.
+  const fallback = [{ id: '1' }];
+  const apiBase = (process.env.NEXT_PUBLIC_API_BASE_URL || '').replace(
+    /\/$/,
+    '',
+  );
+  if (!apiBase) {
+    return fallback;
+  }
+
+  try {
+    const res = await fetch(`${apiBase}/api/books`);
+    if (!res.ok) {
+      return fallback;
+    }
+    const books = (await res.json()) as { id: number }[];
+    const params = books.map((book) => ({ id: String(book.id) }));
+    return params.length > 0 ? params : fallback;
+  } catch {
+    return fallback;
+  }
 }
 
 export default async function BookDetailPage({ params }: BookDetailPageProps) {
+  const apiBase = (process.env.NEXT_PUBLIC_API_BASE_URL || '').replace(
+    /\/$/,
+    '',
+  );
   const { id } = await params;
-  const book = books.find((entry) => entry.id === id);
-  const totalPrice = book
-    ? (Number.parseFloat(book.price.replace('$', '')) + 4.5).toFixed(2)
-    : '0.00';
+  let books: BookRecord[] = [];
+  if (apiBase) {
+    try {
+      const res = await fetch(`${apiBase}/api/books`);
+      if (res.ok) {
+        books = (await res.json()) as BookRecord[];
+      }
+    } catch {
+      books = [];
+    }
+  }
+  const book = books.find((entry) => String(entry.id) === id);
+  const authorName = book
+    ? [book.author_first_name, book.author_last_name]
+        .filter(Boolean)
+        .join(' ') || 'Unknown author'
+    : '';
 
   if (!book) {
     return (
@@ -51,17 +91,21 @@ export default async function BookDetailPage({ params }: BookDetailPageProps) {
           <CardContent>
             <Box display="flex" flexDirection="column" gap={4}>
               <Text variant="h1" weight="bold">
-                {book.title}
+                {book.name}
               </Text>
               <Text variant="body-lg" color="subtle">
-                by {book.author}
+                by {authorName}
               </Text>
               <Box display="flex" gap={2} flexWrap="wrap">
-                <Badge intent="info">{book.genre}</Badge>
-                <Badge intent="success">{book.format}</Badge>
-                <Badge intent="warning">{book.condition}</Badge>
+                <Badge intent="info">{book.type || 'Tag'}</Badge>
+                <Badge intent="success">{book.status || 'Status'}</Badge>
+                <Badge intent="warning">{book.priority || 'Priority'}</Badge>
               </Box>
-              <Text variant="body-md">{book.description}</Text>
+              <Text variant="body-md" color="subtle">
+                {book.publisher
+                  ? `Published by ${book.publisher}.`
+                  : 'Publisher unknown.'}
+              </Text>
               <Box
                 display="grid"
                 gridTemplateColumns="repeat(2, minmax(0, 1fr))"
@@ -69,34 +113,34 @@ export default async function BookDetailPage({ params }: BookDetailPageProps) {
               >
                 <Box>
                   <Text variant="body-sm" color="subtle">
-                    ISBN
+                    Author country
                   </Text>
                   <Text variant="body-md" weight="medium">
-                    {book.isbn}
+                    {book.author_country || '—'}
                   </Text>
                 </Box>
                 <Box>
                   <Text variant="body-sm" color="subtle">
-                    Seller
+                    Publisher country
                   </Text>
                   <Text variant="body-md" weight="medium">
-                    {book.seller}
+                    {book.publisher_country || '—'}
                   </Text>
                 </Box>
                 <Box>
                   <Text variant="body-sm" color="subtle">
-                    Rating
+                    Pages
                   </Text>
                   <Text variant="body-md" weight="medium">
-                    {book.rating} / 5
+                    {book.pages ?? '—'}
                   </Text>
                 </Box>
                 <Box>
                   <Text variant="body-sm" color="subtle">
-                    Format
+                    Listing ID
                   </Text>
                   <Text variant="body-md" weight="medium">
-                    {book.format}
+                    #{book.id}
                   </Text>
                 </Box>
               </Box>
@@ -109,25 +153,25 @@ export default async function BookDetailPage({ params }: BookDetailPageProps) {
           <CardContent>
             <Box display="flex" flexDirection="column" gap={4}>
               <Box display="flex" justifyContent="space-between">
-                <Text variant="body-md">Listing price</Text>
+                <Text variant="body-md">Listing status</Text>
                 <Text variant="body-md" weight="medium">
-                  {book.price}
+                  {book.status || 'Unknown'}
                 </Text>
               </Box>
               <Box display="flex" justifyContent="space-between">
-                <Text variant="body-md">Shipping</Text>
+                <Text variant="body-md">Priority</Text>
                 <Text variant="body-md" weight="medium">
-                  $4.50
+                  {book.priority || 'Normal'}
                 </Text>
               </Box>
               <Box display="flex" justifyContent="space-between">
-                <Text variant="body-md">Estimated total</Text>
+                <Text variant="body-md">Tag</Text>
                 <Text variant="body-md" weight="medium">
-                  ${totalPrice}
+                  {book.type || '—'}
                 </Text>
               </Box>
               <Button variant="solid" intent="info">
-                Add to cart
+                Request details
               </Button>
               <Button variant="outline" intent="neutral" disabled>
                 Save for later

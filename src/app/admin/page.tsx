@@ -154,6 +154,26 @@ export default function AdminPage() {
                   Review listings
                 </Button>
               </Link>
+              <Link href="/admin/authors">
+                <Button variant="outline" intent="neutral" fullWidth>
+                  Manage authors
+                </Button>
+              </Link>
+              <Link href="/admin/publishers">
+                <Button variant="outline" intent="neutral" fullWidth>
+                  Manage publishers
+                </Button>
+              </Link>
+              <Link href="/admin/tags">
+                <Button variant="outline" intent="neutral" fullWidth>
+                  View tags
+                </Button>
+              </Link>
+              <Link href="/admin/roles">
+                <Button variant="outline" intent="neutral" fullWidth>
+                  View roles
+                </Button>
+              </Link>
               <Button variant="outline" intent="neutral" disabled fullWidth>
                 Settings
               </Button>

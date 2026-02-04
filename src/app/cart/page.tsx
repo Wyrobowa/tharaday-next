@@ -1,6 +1,7 @@
 'use client';
 
 import Link from 'next/link';
+import { useEffect, useMemo, useState } from 'react';
 import {
   Box,
   Button,
@@ -12,20 +13,28 @@ import {
   Input,
 } from 'tharaday';
 
-import { books } from '@/helpers/books';
-
-const cartItems = books.slice(0, 2).map((book) => ({
-  ...book,
-  quantity: 1,
-}));
+import { apiGet } from '@/lib/api';
+import { BookRecord } from '@/types/api';
 
 export default function CartPage() {
-  const subtotal = cartItems.reduce(
-    (total, item) => total + Number.parseFloat(item.price.replace('$', '')),
-    0,
+  const [books, setBooks] = useState<BookRecord[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    apiGet<BookRecord[]>('/api/books')
+      .then((data) => setBooks(data))
+      .catch((err) => console.error(err))
+      .finally(() => setIsLoading(false));
+  }, []);
+
+  const cartItems = useMemo(
+    () =>
+      books.slice(0, 2).map((book) => ({
+        ...book,
+        quantity: 1,
+      })),
+    [books],
   );
-  const shipping = 6.5;
-  const total = (subtotal + shipping).toFixed(2);
 
   return (
     <Box paddingY={8} display="flex" flexDirection="column" gap={8}>
@@ -47,23 +56,25 @@ export default function CartPage() {
           <CardHeader title="Items in your cart" />
           <CardContent>
             <Box display="flex" flexDirection="column" gap={5}>
-              {cartItems.map((item) => (
+              {cartItems.map((book) => (
                 <Box
-                  key={item.id}
+                  key={book.id}
                   display="flex"
                   justifyContent="space-between"
                   alignItems="center"
                 >
                   <Box>
                     <Text variant="body-md" weight="medium">
-                      {item.title}
+                      {book.name}
                     </Text>
                     <Text variant="body-sm" color="subtle">
-                      {item.author} · {item.format}
+                      {[book.author_first_name, book.author_last_name]
+                        .filter(Boolean)
+                        .join(' ') || 'Unknown author'}
                     </Text>
                     <Box display="flex" gap={2} paddingTop={2}>
-                      <Badge intent="info">{item.condition}</Badge>
-                      <Badge intent="success">{item.genre}</Badge>
+                      <Badge intent="info">{book.type || 'Tag'}</Badge>
+                      <Badge intent="success">{book.status || 'Status'}</Badge>
                     </Box>
                   </Box>
                   <Box
@@ -73,10 +84,10 @@ export default function CartPage() {
                     gap={2}
                   >
                     <Text variant="body-md" weight="medium">
-                      {item.price}
+                      {book.priority || 'Priority'}
                     </Text>
                     <Text variant="body-sm" color="subtle">
-                      Qty {item.quantity}
+                      Qty {book.quantity}
                     </Text>
                     <Button
                       variant="outline"
@@ -98,21 +109,21 @@ export default function CartPage() {
           <CardContent>
             <Box display="flex" flexDirection="column" gap={4}>
               <Box display="flex" justifyContent="space-between">
-                <Text variant="body-md">Subtotal</Text>
+                <Text variant="body-md">Items</Text>
                 <Text variant="body-md" weight="medium">
-                  ${subtotal.toFixed(2)}
+                  {isLoading ? 'Loading...' : cartItems.length}
                 </Text>
               </Box>
               <Box display="flex" justifyContent="space-between">
-                <Text variant="body-md">Shipping</Text>
+                <Text variant="body-md">Pricing</Text>
                 <Text variant="body-md" weight="medium">
-                  ${shipping.toFixed(2)}
+                  Not available
                 </Text>
               </Box>
               <Box display="flex" justifyContent="space-between">
-                <Text variant="body-md">Estimated total</Text>
+                <Text variant="body-md">Checkout status</Text>
                 <Text variant="body-md" weight="medium">
-                  ${total}
+                  Disabled
                 </Text>
               </Box>
               <Input label="Promo code" placeholder="Enter code" />

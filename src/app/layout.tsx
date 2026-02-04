@@ -27,7 +27,7 @@ export default function RootLayout({
   children: ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" data-theme="sanzo-152-light">
       <body className={`${geistSans.variable} ${geistMono.variable}`}>
         <ClientLayout>{children}</ClientLayout>
       </body>

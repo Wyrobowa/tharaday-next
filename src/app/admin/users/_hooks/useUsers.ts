@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 
 import { Role, Status, UserRow } from '@/app/admin/users/types';
-import { apiGet, apiPatch, apiPost } from '@/lib/api';
+import { apiDelete, apiGet, apiPatch, apiPost } from '@/lib/api';
 
 import { UserFormType } from '../_components/UserForm.types';
 
@@ -9,7 +9,7 @@ export function useUsers() {
   const [roles, setRoles] = useState<Role[]>([]);
   const [statuses, setStatuses] = useState<Status[]>([]);
   const [users, setUsers] = useState<UserRow[]>([]);
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
@@ -38,13 +38,17 @@ export function useUsers() {
   };
 
   const handleAddUser = async () => {
+    if (form.role_id === '' || form.status_id === '') {
+      alert('Role and status are required.');
+      return;
+    }
     setIsLoading(true);
     try {
       await apiPost('/api/users', {
         name: form.name.trim(),
         email: form.email.trim(),
-        role_id: form.role_id === '' ? null : form.role_id,
-        status_id: form.status_id === '' ? null : form.status_id,
+        role_id: form.role_id,
+        status_id: form.status_id,
       });
 
       await fetchUsers();
@@ -59,14 +63,18 @@ export function useUsers() {
 
   const handleEditUser = async () => {
     if (!editingUser) return;
+    if (form.role_id === '' || form.status_id === '') {
+      alert('Role and status are required.');
+      return;
+    }
     setIsLoading(true);
     try {
       await apiPatch('/api/users', {
         id: editingUser.id,
         name: form.name.trim(),
         email: form.email.trim(),
-        role_id: form.role_id === '' ? null : form.role_id,
-        status_id: form.status_id === '' ? null : form.status_id,
+        role_id: form.role_id,
+        status_id: form.status_id,
       });
 
       await fetchUsers();
@@ -85,10 +93,7 @@ export function useUsers() {
 
     setIsLoading(true);
     try {
-      await apiPatch('/api/users', {
-        id: id,
-        status_id: 3,
-      });
+      await apiDelete(`/api/users?id=${id}`);
 
       await fetchUsers();
     } catch (err) {
@@ -128,7 +133,6 @@ export function useUsers() {
 
   useEffect(() => {
     (async () => {
-      setIsLoading(true);
       try {
         const [rolesData, statusesData, usersData] = await Promise.all([
           apiGet<Role[]>('/api/roles'),
