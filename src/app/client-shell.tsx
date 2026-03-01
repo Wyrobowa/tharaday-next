@@ -19,7 +19,7 @@ export default function ClientShell({
   return (
     <AppLayout
       headerTitle="Tharaday Books"
-      maxWidth={1100}
+      maxWidth="90%"
       navItems={[
         { id: 'home', label: 'Home' },
         { id: 'books', label: 'Books' },
