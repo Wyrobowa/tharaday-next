@@ -11,7 +11,10 @@ export default function ClientShell({
   const pathname = usePathname();
 
   const normalizedPathname = pathname.replace(/\/+$/, '') || '/';
-  const activeNavId = normalizedPathname === '/books' ? 'books' : 'home';
+  const activeNavId =
+    normalizedPathname === '/books' || normalizedPathname === '/book'
+      ? 'books'
+      : 'home';
 
   return (
     <AppLayout
