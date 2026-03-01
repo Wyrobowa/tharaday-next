@@ -10,16 +10,13 @@ type Option = { value: string; label: string };
 type BooksFiltersProps = {
   searchQuery: string;
   selectedType: string;
-  selectedPriority: string;
   selectedAuthor: string;
   selectedSort: string;
   typeOptions: Option[];
-  priorityOptions: Option[];
   authorOptions: Option[];
   sortOptions: Option[];
   onSearchQueryChange: (value: string) => void;
   onSelectedTypeChange: (value: string) => void;
-  onSelectedPriorityChange: (value: string) => void;
   onSelectedAuthorChange: (value: string) => void;
   onSelectedSortChange: (value: string) => void;
   onClear: () => void;
@@ -28,16 +25,13 @@ type BooksFiltersProps = {
 export function BooksFilters({
   searchQuery,
   selectedType,
-  selectedPriority,
   selectedAuthor,
   selectedSort,
   typeOptions,
-  priorityOptions,
   authorOptions,
   sortOptions,
   onSearchQueryChange,
   onSelectedTypeChange,
-  onSelectedPriorityChange,
   onSelectedAuthorChange,
   onSelectedSortChange,
   onClear,
@@ -72,7 +66,7 @@ export function BooksFilters({
       {areAdvancedFiltersVisible ? (
         <Box
           display="grid"
-          gridTemplateColumns="repeat(5, minmax(0, 1fr))"
+          gridTemplateColumns="repeat(4, minmax(0, 1fr))"
           gap={3}
           alignItems="flex-end"
         >
@@ -81,12 +75,6 @@ export function BooksFilters({
             value={selectedType}
             options={typeOptions}
             onChange={(event) => onSelectedTypeChange(event.target.value)}
-          />
-          <Select
-            label="Priority"
-            value={selectedPriority}
-            options={priorityOptions}
-            onChange={(event) => onSelectedPriorityChange(event.target.value)}
           />
           <Select
             label="Author"

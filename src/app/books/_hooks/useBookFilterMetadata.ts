@@ -6,15 +6,11 @@ import { getApiUrl } from '@/consts/api';
 
 export type BookFiltersMetadata = {
   types: string[];
-  statuses: string[];
-  priorities: string[];
   authors: string[];
 };
 
 const EMPTY_METADATA: BookFiltersMetadata = {
   types: [],
-  statuses: [],
-  priorities: [],
   authors: [],
 };
 
@@ -40,8 +36,6 @@ export function useBookFilterMetadata() {
 
         setMetadata({
           types: Array.isArray(data.types) ? data.types : [],
-          statuses: Array.isArray(data.statuses) ? data.statuses : [],
-          priorities: Array.isArray(data.priorities) ? data.priorities : [],
           authors: Array.isArray(data.authors) ? data.authors : [],
         });
       })

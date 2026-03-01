@@ -9,7 +9,6 @@ type FilterOption = { value: string; label: string };
 export function useBookFilters(metadata: BookFiltersMetadata) {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedType, setSelectedType] = useState('');
-  const [selectedPriority, setSelectedPriority] = useState('');
   const [selectedAuthor, setSelectedAuthor] = useState('');
   const [selectedSort, setSelectedSort] = useState('newest');
 
@@ -27,16 +26,6 @@ export function useBookFilters(metadata: BookFiltersMetadata) {
     ];
   }, [metadata.authors]);
 
-  const priorityOptions = useMemo<FilterOption[]>(() => {
-    return [
-      { value: '', label: 'All priorities' },
-      ...metadata.priorities.map((priority) => ({
-        value: priority,
-        label: priority,
-      })),
-    ];
-  }, [metadata.priorities]);
-
   const sortOptions = useMemo<FilterOption[]>(
     () => [
       { value: 'newest', label: 'Newest first' },
@@ -51,7 +40,6 @@ export function useBookFilters(metadata: BookFiltersMetadata) {
   const clearFilters = () => {
     setSearchQuery('');
     setSelectedType('');
-    setSelectedPriority('');
     setSelectedAuthor('');
     setSelectedSort('newest');
   };
@@ -59,16 +47,13 @@ export function useBookFilters(metadata: BookFiltersMetadata) {
   return {
     searchQuery,
     selectedType,
-    selectedPriority,
     selectedAuthor,
     selectedSort,
     typeOptions,
-    priorityOptions,
     authorOptions,
     sortOptions,
     setSearchQuery,
     setSelectedType,
-    setSelectedPriority,
     setSelectedAuthor,
     setSelectedSort,
     clearFilters,

@@ -23,16 +23,13 @@ export default function BooksPage() {
   const {
     searchQuery,
     selectedType,
-    selectedPriority,
     selectedAuthor,
     selectedSort,
     typeOptions,
-    priorityOptions,
     authorOptions,
     sortOptions,
     setSearchQuery,
     setSelectedType,
-    setSelectedPriority,
     setSelectedAuthor,
     setSelectedSort,
     clearFilters,
@@ -52,7 +49,6 @@ export default function BooksPage() {
     useBooks({
       q: debouncedSearchQuery,
       type: selectedType,
-      priority: selectedPriority,
       author: selectedAuthor,
       sort: selectedSort as
         | 'newest'
@@ -99,16 +95,13 @@ export default function BooksPage() {
       <BooksFilters
         searchQuery={searchQuery}
         selectedType={selectedType}
-        selectedPriority={selectedPriority}
         selectedAuthor={selectedAuthor}
         selectedSort={selectedSort}
         typeOptions={typeOptions}
-        priorityOptions={priorityOptions}
         authorOptions={authorOptions}
         sortOptions={sortOptions}
         onSearchQueryChange={setSearchQuery}
         onSelectedTypeChange={setSelectedType}
-        onSelectedPriorityChange={setSelectedPriority}
         onSelectedAuthorChange={setSelectedAuthor}
         onSelectedSortChange={setSelectedSort}
         onClear={clearFilters}
