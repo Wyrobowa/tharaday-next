@@ -19,7 +19,7 @@
     "next": "^16",
     "react": "^19",
     "react-dom": "^19",
-    "tharaday": "^0.5.5"
+    "tharaday": "^0.5.7"
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",
