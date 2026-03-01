@@ -1,7 +1,8 @@
 'use client';
 
-import { useEffect, useMemo, useState } from 'react';
-import { Badge, Box, Card, CardContent, Text } from 'tharaday';
+import Link from 'next/link';
+import { useEffect, useMemo, useRef, useState } from 'react';
+import { Badge, Box, Button, Card, CardContent, Text } from 'tharaday';
 
 import { getApiUrl } from '@/consts/api';
 
@@ -24,6 +25,7 @@ export function NewArrivalsWidget() {
   const [books, setBooks] = useState<BookRecord[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const carouselRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     let isMounted = true;
@@ -62,13 +64,48 @@ export function NewArrivalsWidget() {
     [books],
   );
 
+  const scrollCarousel = (direction: 'left' | 'right') => {
+    if (!carouselRef.current) {
+      return;
+    }
+
+    const offset = direction === 'left' ? -300 : 300;
+    carouselRef.current.scrollBy({ left: offset, behavior: 'smooth' });
+  };
+
   return (
     <Card bordered shadow="sm">
       <CardContent>
         <Box display="flex" flexDirection="column" gap={4}>
-          <Text variant="h3" weight="bold">
-            New arrivals
-          </Text>
+          <Box
+            display="flex"
+            justifyContent="space-between"
+            alignItems="center"
+          >
+            <Text variant="h3" weight="bold">
+              New arrivals
+            </Text>
+            <Box display="flex" gap={2}>
+              <Button
+                variant="outline"
+                size="sm"
+                intent="neutral"
+                onClick={() => scrollCarousel('left')}
+                aria-label="Scroll new arrivals left"
+              >
+                ←
+              </Button>
+              <Button
+                variant="outline"
+                size="sm"
+                intent="neutral"
+                onClick={() => scrollCarousel('right')}
+                aria-label="Scroll new arrivals right"
+              >
+                →
+              </Button>
+            </Box>
+          </Box>
 
           {isLoading ? (
             <Text variant="body-md" color="subtle">
@@ -88,52 +125,65 @@ export function NewArrivalsWidget() {
             </Text>
           ) : null}
 
-          <Box display="grid" gap={3}>
+          <div
+            ref={carouselRef}
+            style={{
+              display: 'grid',
+              gap: '12px',
+              gridAutoFlow: 'column',
+              gridAutoColumns: 'minmax(220px, 240px)',
+              overflowX: 'auto',
+              scrollSnapType: 'x mandatory',
+              paddingBottom: '6px',
+            }}
+          >
             {newArrivals.map((book) => {
               const authorName = [book.author_first_name, book.author_last_name]
                 .filter(Boolean)
                 .join(' ');
 
               return (
-                <Box
+                <Link
                   key={book.id}
-                  display="flex"
-                  flexDirection="column"
-                  gap={1}
-                  paddingY={2}
+                  href={`/book?id=${book.id}`}
+                  style={{
+                    color: 'inherit',
+                    textDecoration: 'none',
+                    scrollSnapAlign: 'start',
+                  }}
                 >
-                  <Text variant="body-lg" weight="bold">
-                    {book.title || book.name || 'Untitled'}
-                  </Text>
-                  <Text variant="body-sm" color="subtle">
-                    {authorName || 'Unknown author'}
-                  </Text>
-                  {book.description ? (
-                    <Text variant="body-sm" color="subtle">
-                      {book.description}
-                    </Text>
-                  ) : null}
-                  <Box display="flex" gap={2}>
-                    <Badge intent="info">{book.type || 'New Arrival'}</Badge>
-                    <Badge intent="success">
-                      {book.status || 'Unknown status'}
-                    </Badge>
-                    <Badge intent="info">
-                      {book.priority || 'Unknown priority'}
-                    </Badge>
-                  </Box>
-                  <Box display="flex" gap={2}>
-                    <Text variant="body-sm" color="subtle">
-                      {book.publisher || 'Unknown publisher'}
-                    </Text>
-                    <Text variant="body-sm" color="subtle">
-                      {book.pages ? `${book.pages} pages` : 'Pages N/A'}
-                    </Text>
-                  </Box>
-                </Box>
+                  <Card bordered shadow="sm" style={{ height: '100%' }}>
+                    <CardContent>
+                      <Box display="flex" flexDirection="column" gap={2}>
+                        <Text variant="body-lg" weight="bold">
+                          {book.title || book.name || 'Untitled'}
+                        </Text>
+                        <Text variant="body-sm" color="subtle">
+                          {authorName || 'Unknown author'}
+                        </Text>
+                        {book.description ? (
+                          <Text variant="body-sm" color="subtle">
+                            {book.description}
+                          </Text>
+                        ) : null}
+                        <Box display="flex" gap={2}>
+                          <Badge intent="info">
+                            {book.type || 'New Arrival'}
+                          </Badge>
+                          <Badge intent="success">
+                            {book.status || 'Unknown status'}
+                          </Badge>
+                        </Box>
+                        <Text variant="body-sm" color="subtle">
+                          {book.pages ? `${book.pages} pages` : 'Pages N/A'}
+                        </Text>
+                      </Box>
+                    </CardContent>
+                  </Card>
+                </Link>
               );
             })}
-          </Box>
+          </div>
         </Box>
       </CardContent>
     </Card>
