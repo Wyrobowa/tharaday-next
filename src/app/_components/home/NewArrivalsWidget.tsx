@@ -4,22 +4,10 @@ import Link from 'next/link';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { Badge, Box, Button, Card, CardContent, Text } from 'tharaday';
 
+import { BookCover } from '@/app/_components/BookCover';
+import { BookRecord } from '@/app/books/types';
+import { getAuthorName, getBookTitle } from '@/app/books/utils';
 import { getApiUrl } from '@/consts/api';
-
-type BookRecord = {
-  id: number;
-  title: string;
-  name?: string | null;
-  description: string | null;
-  tag_id: number | null;
-  pages: number | null;
-  type: string | null;
-  status: string | null;
-  priority: string | null;
-  author_first_name: string | null;
-  author_last_name: string | null;
-  publisher: string | null;
-};
 
 export function NewArrivalsWidget() {
   const [books, setBooks] = useState<BookRecord[]>([]);
@@ -138,9 +126,7 @@ export function NewArrivalsWidget() {
             }}
           >
             {newArrivals.map((book) => {
-              const authorName = [book.author_first_name, book.author_last_name]
-                .filter(Boolean)
-                .join(' ');
+              const authorName = getAuthorName(book);
 
               return (
                 <Link
@@ -155,17 +141,18 @@ export function NewArrivalsWidget() {
                   <Card bordered shadow="sm" style={{ height: '100%' }}>
                     <CardContent>
                       <Box display="flex" flexDirection="column" gap={2}>
-                        <Text variant="body-lg" weight="bold">
-                          {book.title || book.name || 'Untitled'}
+                        <BookCover
+                          id={book.id}
+                          title={getBookTitle(book)}
+                          author={authorName}
+                          size="sm"
+                        />
+                        <Text variant="body-md" weight="bold">
+                          {getBookTitle(book)}
                         </Text>
                         <Text variant="body-sm" color="subtle">
                           {authorName || 'Unknown author'}
                         </Text>
-                        {book.description ? (
-                          <Text variant="body-sm" color="subtle">
-                            {book.description}
-                          </Text>
-                        ) : null}
                         <Box display="flex" gap={2}>
                           <Badge intent="info">
                             {book.type || 'New Arrival'}
