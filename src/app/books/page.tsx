@@ -14,14 +14,17 @@ export default function BooksPage() {
     selectedType,
     selectedStatus,
     selectedAuthor,
+    selectedSort,
     typeOptions,
     statusOptions,
     authorOptions,
+    sortOptions,
     filteredBooks,
     setSearchQuery,
     setSelectedType,
     setSelectedStatus,
     setSelectedAuthor,
+    setSelectedSort,
     clearFilters,
   } = useBookFilters(books);
 
@@ -36,13 +39,16 @@ export default function BooksPage() {
         selectedType={selectedType}
         selectedStatus={selectedStatus}
         selectedAuthor={selectedAuthor}
+        selectedSort={selectedSort}
         typeOptions={typeOptions}
         statusOptions={statusOptions}
         authorOptions={authorOptions}
+        sortOptions={sortOptions}
         onSearchQueryChange={setSearchQuery}
         onSelectedTypeChange={setSelectedType}
         onSelectedStatusChange={setSelectedStatus}
         onSelectedAuthorChange={setSelectedAuthor}
+        onSelectedSortChange={setSelectedSort}
         onClear={clearFilters}
       />
 

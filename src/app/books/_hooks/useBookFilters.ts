@@ -12,6 +12,7 @@ export function useBookFilters(books: BookRecord[]) {
   const [selectedType, setSelectedType] = useState('');
   const [selectedStatus, setSelectedStatus] = useState('');
   const [selectedAuthor, setSelectedAuthor] = useState('');
+  const [selectedSort, setSelectedSort] = useState('newest');
 
   const typeOptions = useMemo<FilterOption[]>(() => {
     const uniqueTypes = Array.from(
@@ -44,10 +45,21 @@ export function useBookFilters(books: BookRecord[]) {
     ];
   }, [books]);
 
+  const sortOptions = useMemo<FilterOption[]>(
+    () => [
+      { value: 'newest', label: 'Newest first' },
+      { value: 'title_asc', label: 'Title (A-Z)' },
+      { value: 'title_desc', label: 'Title (Z-A)' },
+      { value: 'author_asc', label: 'Author (A-Z)' },
+      { value: 'author_desc', label: 'Author (Z-A)' },
+    ],
+    [],
+  );
+
   const filteredBooks = useMemo(() => {
     const normalizedQuery = searchQuery.trim().toLowerCase();
 
-    return books.filter((book) => {
+    const onlyMatchingBooks = books.filter((book) => {
       const authorName = getAuthorName(book).toLowerCase();
 
       const matchesQuery =
@@ -62,13 +74,37 @@ export function useBookFilters(books: BookRecord[]) {
 
       return matchesQuery && matchesType && matchesStatus && matchesAuthor;
     });
-  }, [books, searchQuery, selectedType, selectedStatus, selectedAuthor]);
+
+    return [...onlyMatchingBooks].sort((a, b) => {
+      if (selectedSort === 'title_asc') {
+        return a.name.localeCompare(b.name);
+      }
+      if (selectedSort === 'title_desc') {
+        return b.name.localeCompare(a.name);
+      }
+      if (selectedSort === 'author_asc') {
+        return getAuthorName(a).localeCompare(getAuthorName(b));
+      }
+      if (selectedSort === 'author_desc') {
+        return getAuthorName(b).localeCompare(getAuthorName(a));
+      }
+      return b.id - a.id;
+    });
+  }, [
+    books,
+    searchQuery,
+    selectedType,
+    selectedStatus,
+    selectedAuthor,
+    selectedSort,
+  ]);
 
   const clearFilters = () => {
     setSearchQuery('');
     setSelectedType('');
     setSelectedStatus('');
     setSelectedAuthor('');
+    setSelectedSort('newest');
   };
 
   return {
@@ -76,14 +112,17 @@ export function useBookFilters(books: BookRecord[]) {
     selectedType,
     selectedStatus,
     selectedAuthor,
+    selectedSort,
     typeOptions,
     statusOptions,
     authorOptions,
+    sortOptions,
     filteredBooks,
     setSearchQuery,
     setSelectedType,
     setSelectedStatus,
     setSelectedAuthor,
+    setSelectedSort,
     clearFilters,
   };
 }
