@@ -1,58 +1,26 @@
 'use client';
 
 import Link from 'next/link';
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useRef } from 'react';
 import { Badge, Box, Button, Card, CardContent, Text } from 'tharaday';
 
 import { BookCover } from '@/app/_components/BookCover';
-import { BookRecord } from '@/app/books/types';
+import { useBooks } from '@/app/books/_hooks/useBooks';
 import { getAuthorName, getBookTitle } from '@/app/books/utils';
-import { getApiUrl } from '@/consts/api';
 
 import styles from './NewArrivalsWidget.module.css';
 
 export function NewArrivalsWidget() {
-  const [books, setBooks] = useState<BookRecord[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
   const carouselRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    let isMounted = true;
-
-    fetch(getApiUrl('/books'))
-      .then(async (response) => {
-        if (!response.ok) {
-          throw new Error(`Failed to load books (${response.status})`);
-        }
-
-        const data = (await response.json()) as BookRecord[];
-        if (isMounted) {
-          setBooks(data);
-        }
-      })
-      .catch((err) => {
-        if (isMounted) {
-          setError(
-            err instanceof Error ? err.message : 'Failed to load new arrivals',
-          );
-        }
-      })
-      .finally(() => {
-        if (isMounted) {
-          setIsLoading(false);
-        }
-      });
-
-    return () => {
-      isMounted = false;
-    };
-  }, []);
-
-  const newArrivals = useMemo(
-    () => books.filter((book) => book.tag_id === 6),
-    [books],
-  );
+  const {
+    books: newArrivals,
+    isLoading,
+    error,
+  } = useBooks({
+    type: 'New Arrival',
+    sort: 'newest',
+    limit: 12,
+  });
 
   const scrollCarousel = (direction: 'left' | 'right') => {
     if (!carouselRef.current) {

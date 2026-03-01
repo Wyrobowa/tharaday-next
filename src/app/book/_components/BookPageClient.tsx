@@ -12,8 +12,6 @@ import { getAuthorName, getBookTitle } from '../../books/utils';
 
 export function BookPageClient() {
   const searchParams = useSearchParams();
-  const { books, isLoading, error } = useBooks();
-
   const bookId = searchParams.get('id');
 
   const parsedBookId = useMemo(() => {
@@ -21,13 +19,13 @@ export function BookPageClient() {
     return Number.isInteger(numericId) && numericId > 0 ? numericId : null;
   }, [bookId]);
 
-  const book = useMemo(() => {
-    if (!parsedBookId) {
-      return null;
-    }
+  const { books, isLoading, error } = useBooks({
+    id: parsedBookId || undefined,
+    limit: 1,
+    enabled: Boolean(parsedBookId),
+  });
 
-    return books.find((bookRecord) => bookRecord.id === parsedBookId) ?? null;
-  }, [books, parsedBookId]);
+  const book = books[0] || null;
 
   return (
     <Box display="flex" flexDirection="column" gap={6}>

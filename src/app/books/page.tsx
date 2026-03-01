@@ -1,14 +1,23 @@
 'use client';
 
-import { Box, Text } from 'tharaday';
+import { useEffect, useState } from 'react';
+import { Box, Button, Text } from 'tharaday';
 
 import { BooksFilters } from './_components/BooksFilters';
 import { BooksList } from './_components/BooksList';
+import { useBookFilterMetadata } from './_hooks/useBookFilterMetadata';
 import { useBookFilters } from './_hooks/useBookFilters';
 import { useBooks } from './_hooks/useBooks';
 
 export default function BooksPage() {
-  const { books, isLoading, error } = useBooks();
+  const [debouncedSearchQuery, setDebouncedSearchQuery] = useState('');
+
+  const {
+    metadata,
+    isLoading: isLoadingFilterMetadata,
+    error: filterMetadataError,
+  } = useBookFilterMetadata();
+
   const {
     searchQuery,
     selectedType,
@@ -21,7 +30,6 @@ export default function BooksPage() {
     priorityOptions,
     authorOptions,
     sortOptions,
-    filteredBooks,
     setSearchQuery,
     setSelectedType,
     setSelectedStatus,
@@ -29,7 +37,33 @@ export default function BooksPage() {
     setSelectedAuthor,
     setSelectedSort,
     clearFilters,
-  } = useBookFilters(books);
+  } = useBookFilters(metadata);
+
+  useEffect(() => {
+    const timeout = setTimeout(() => {
+      setDebouncedSearchQuery(searchQuery);
+    }, 350);
+
+    return () => {
+      clearTimeout(timeout);
+    };
+  }, [searchQuery]);
+
+  const { books, isLoading, isLoadingMore, error, hasMore, loadMore } =
+    useBooks({
+      q: debouncedSearchQuery,
+      type: selectedType,
+      status: selectedStatus,
+      priority: selectedPriority,
+      author: selectedAuthor,
+      sort: selectedSort as
+        | 'newest'
+        | 'title_asc'
+        | 'title_desc'
+        | 'author_asc'
+        | 'author_desc',
+      limit: 24,
+    });
 
   return (
     <Box display="flex" flexDirection="column" gap={6}>
@@ -58,9 +92,21 @@ export default function BooksPage() {
         onClear={clearFilters}
       />
 
+      {isLoadingFilterMetadata ? (
+        <Text variant="body-sm" color="subtle">
+          Loading filter options...
+        </Text>
+      ) : null}
+
+      {filterMetadataError ? (
+        <Text variant="body-sm" color="danger">
+          {filterMetadataError}
+        </Text>
+      ) : null}
+
       {!isLoading && !error ? (
         <Text variant="body-sm" color="subtle">
-          {filteredBooks.length} result{filteredBooks.length === 1 ? '' : 's'}
+          Loaded {books.length} book{books.length === 1 ? '' : 's'}
         </Text>
       ) : null}
 
@@ -76,13 +122,21 @@ export default function BooksPage() {
         </Text>
       ) : null}
 
-      {!isLoading && !error && filteredBooks.length === 0 ? (
+      {!isLoading && !error && books.length === 0 ? (
         <Text variant="body-md" color="subtle">
           No books match the current filters.
         </Text>
       ) : null}
 
-      <BooksList books={filteredBooks} />
+      <BooksList books={books} />
+
+      {!isLoading && !error && hasMore ? (
+        <Box>
+          <Button variant="outline" onClick={loadMore} disabled={isLoadingMore}>
+            {isLoadingMore ? 'Loading more...' : 'Load more'}
+          </Button>
+        </Box>
+      ) : null}
     </Box>
   );
 }
