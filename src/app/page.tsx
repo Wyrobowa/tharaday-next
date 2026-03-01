@@ -1,6 +1,6 @@
 import { Box, Text } from 'tharaday';
 
-import { NewArrivalsWidget } from './_components/home/NewArrivalsWidget';
+import { NewArrivalsWidget } from './_components/home/newArrivalsWidget';
 
 export default function HomePage() {
   return (
