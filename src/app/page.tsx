@@ -1,17 +1,29 @@
-import { Box, Text } from 'tharaday';
+'use client';
 
-import { SiteHeader } from './_components/layout/SiteHeader';
+import { useRouter } from 'next/navigation';
+import { AppLayout, Box, Text } from 'tharaday';
 
 export default function HomePage() {
-  return (
-    <Box as="div" marginX="auto" paddingX={4}>
-      <SiteHeader />
+  const router = useRouter();
 
-      <Box as="section" paddingY={12}>
+  return (
+    <AppLayout
+      headerTitle="Tharaday Books"
+      navItems={[
+        { id: 'home', label: 'Home' },
+        { id: 'books', label: 'Books' },
+        { id: 'cart', label: 'Cart' },
+      ]}
+      activeNavId="home"
+      onNavItemClick={(id) => router.push(id === 'home' ? '/' : `/${id}`)}
+      onLogin={() => router.push('/login')}
+      onCreateAccount={() => router.push('/signup')}
+    >
+      <Box paddingY="48px">
         <Text variant="h1" weight="bold">
           Welcome to Tharaday Books bookstore!
         </Text>
       </Box>
-    </Box>
+    </AppLayout>
   );
 }
