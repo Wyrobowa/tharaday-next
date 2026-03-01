@@ -12,10 +12,17 @@ type BooksListProps = {
 };
 
 export function BooksList({ books }: BooksListProps) {
+  const maxDescriptionLength = 180;
+
   return (
     <Box display="grid" gap={4}>
       {books.map((book) => {
         const authorName = getAuthorName(book);
+        const description = book.description || '';
+        const isDescriptionLong = description.length > maxDescriptionLength;
+        const displayedDescription = isDescriptionLong
+          ? `${description.slice(0, maxDescriptionLength).trimEnd()}...`
+          : description;
 
         return (
           <Link
@@ -45,9 +52,13 @@ export function BooksList({ books }: BooksListProps) {
                     <Text variant="body-sm" color="subtle">
                       {authorName || 'Unknown author'}
                     </Text>
-                    {book.description ? (
-                      <Text variant="body-sm" color="subtle">
-                        {book.description}
+                    {description ? (
+                      <Text
+                        variant="body-sm"
+                        color="subtle"
+                        className={styles.descriptionFade}
+                      >
+                        {displayedDescription}
                       </Text>
                     ) : null}
                     <Box display="flex" gap={2}>
