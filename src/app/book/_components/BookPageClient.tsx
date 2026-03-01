@@ -91,9 +91,6 @@ export function BookPageClient() {
 
                 <Box display="flex" gap={2}>
                   <Badge intent="info">{book.type || 'Unknown type'}</Badge>
-                  <Badge intent="success">
-                    {book.status || 'Unknown status'}
-                  </Badge>
                   <Badge intent="info">
                     {book.priority || 'Unknown priority'}
                   </Badge>

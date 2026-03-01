@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { useRef } from 'react';
-import { Badge, Box, Button, Card, CardContent, Text } from 'tharaday';
+import { Box, Button, Card, CardContent, Text } from 'tharaday';
 
 import { BookCover } from '@/app/_components/BookCover';
 import { useBooks } from '@/app/books/_hooks/useBooks';
@@ -108,14 +108,6 @@ export function NewArrivalsWidget() {
                         <Text variant="body-sm" color="subtle">
                           {authorName || 'Unknown author'}
                         </Text>
-                        <Box display="flex" gap={2}>
-                          <Badge intent="info">
-                            {book.type || 'New Arrival'}
-                          </Badge>
-                          <Badge intent="success">
-                            {book.status || 'Unknown status'}
-                          </Badge>
-                        </Box>
                         <Text variant="body-sm" color="subtle">
                           {book.pages ? `${book.pages} pages` : 'Pages N/A'}
                         </Text>

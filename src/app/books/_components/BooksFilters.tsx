@@ -10,18 +10,15 @@ type Option = { value: string; label: string };
 type BooksFiltersProps = {
   searchQuery: string;
   selectedType: string;
-  selectedStatus: string;
   selectedPriority: string;
   selectedAuthor: string;
   selectedSort: string;
   typeOptions: Option[];
-  statusOptions: Option[];
   priorityOptions: Option[];
   authorOptions: Option[];
   sortOptions: Option[];
   onSearchQueryChange: (value: string) => void;
   onSelectedTypeChange: (value: string) => void;
-  onSelectedStatusChange: (value: string) => void;
   onSelectedPriorityChange: (value: string) => void;
   onSelectedAuthorChange: (value: string) => void;
   onSelectedSortChange: (value: string) => void;
@@ -31,18 +28,15 @@ type BooksFiltersProps = {
 export function BooksFilters({
   searchQuery,
   selectedType,
-  selectedStatus,
   selectedPriority,
   selectedAuthor,
   selectedSort,
   typeOptions,
-  statusOptions,
   priorityOptions,
   authorOptions,
   sortOptions,
   onSearchQueryChange,
   onSelectedTypeChange,
-  onSelectedStatusChange,
   onSelectedPriorityChange,
   onSelectedAuthorChange,
   onSelectedSortChange,
@@ -55,7 +49,6 @@ export function BooksFilters({
     <Box display="flex" flexDirection="column" gap={3}>
       <Box display="flex" flexDirection="column" gap={2}>
         <Input
-          label="Search"
           placeholder="Search by title or author"
           value={searchQuery}
           onChange={(event) => onSearchQueryChange(event.target.value)}
@@ -79,7 +72,7 @@ export function BooksFilters({
       {areAdvancedFiltersVisible ? (
         <Box
           display="grid"
-          gridTemplateColumns="repeat(6, minmax(0, 1fr))"
+          gridTemplateColumns="repeat(5, minmax(0, 1fr))"
           gap={3}
           alignItems="flex-end"
         >
@@ -88,12 +81,6 @@ export function BooksFilters({
             value={selectedType}
             options={typeOptions}
             onChange={(event) => onSelectedTypeChange(event.target.value)}
-          />
-          <Select
-            label="Status"
-            value={selectedStatus}
-            options={statusOptions}
-            onChange={(event) => onSelectedStatusChange(event.target.value)}
           />
           <Select
             label="Priority"

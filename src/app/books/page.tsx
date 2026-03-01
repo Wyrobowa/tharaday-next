@@ -1,16 +1,18 @@
 'use client';
 
-import { useEffect, useState } from 'react';
-import { Box, Button, Text } from 'tharaday';
+import { useEffect, useRef, useState } from 'react';
+import { Box, Loader, Text } from 'tharaday';
 
 import { BooksFilters } from './_components/BooksFilters';
 import { BooksList } from './_components/BooksList';
 import { useBookFilterMetadata } from './_hooks/useBookFilterMetadata';
 import { useBookFilters } from './_hooks/useBookFilters';
 import { useBooks } from './_hooks/useBooks';
+import styles from './page.module.css';
 
 export default function BooksPage() {
   const [debouncedSearchQuery, setDebouncedSearchQuery] = useState('');
+  const loadMoreSentinelRef = useRef<HTMLDivElement | null>(null);
 
   const {
     metadata,
@@ -21,18 +23,15 @@ export default function BooksPage() {
   const {
     searchQuery,
     selectedType,
-    selectedStatus,
     selectedPriority,
     selectedAuthor,
     selectedSort,
     typeOptions,
-    statusOptions,
     priorityOptions,
     authorOptions,
     sortOptions,
     setSearchQuery,
     setSelectedType,
-    setSelectedStatus,
     setSelectedPriority,
     setSelectedAuthor,
     setSelectedSort,
@@ -49,11 +48,10 @@ export default function BooksPage() {
     };
   }, [searchQuery]);
 
-  const { books, isLoading, isLoadingMore, error, hasMore, loadMore } =
+  const { books, isLoading, isLoadingMore, error, hasMore, total, loadMore } =
     useBooks({
       q: debouncedSearchQuery,
       type: selectedType,
-      status: selectedStatus,
       priority: selectedPriority,
       author: selectedAuthor,
       sort: selectedSort as
@@ -65,27 +63,51 @@ export default function BooksPage() {
       limit: 24,
     });
 
+  useEffect(() => {
+    if (!hasMore || isLoading || isLoadingMore) {
+      return;
+    }
+
+    const sentinel = loadMoreSentinelRef.current;
+    if (!sentinel) {
+      return;
+    }
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const [entry] = entries;
+        if (entry.isIntersecting) {
+          loadMore();
+        }
+      },
+      {
+        root: null,
+        rootMargin: '300px 0px',
+        threshold: 0,
+      },
+    );
+
+    observer.observe(sentinel);
+
+    return () => {
+      observer.disconnect();
+    };
+  }, [hasMore, isLoading, isLoadingMore, loadMore]);
+
   return (
     <Box display="flex" flexDirection="column" gap={6}>
-      <Text variant="h1" weight="bold">
-        Books
-      </Text>
-
       <BooksFilters
         searchQuery={searchQuery}
         selectedType={selectedType}
-        selectedStatus={selectedStatus}
         selectedPriority={selectedPriority}
         selectedAuthor={selectedAuthor}
         selectedSort={selectedSort}
         typeOptions={typeOptions}
-        statusOptions={statusOptions}
         priorityOptions={priorityOptions}
         authorOptions={authorOptions}
         sortOptions={sortOptions}
         onSearchQueryChange={setSearchQuery}
         onSelectedTypeChange={setSelectedType}
-        onSelectedStatusChange={setSelectedStatus}
         onSelectedPriorityChange={setSelectedPriority}
         onSelectedAuthorChange={setSelectedAuthor}
         onSelectedSortChange={setSelectedSort}
@@ -106,7 +128,9 @@ export default function BooksPage() {
 
       {!isLoading && !error ? (
         <Text variant="body-sm" color="subtle">
-          Loaded {books.length} book{books.length === 1 ? '' : 's'}
+          {typeof total === 'number'
+            ? `Showing ${books.length} of ${total} books`
+            : `Showing ${books.length} books`}
         </Text>
       ) : null}
 
@@ -131,11 +155,14 @@ export default function BooksPage() {
       <BooksList books={books} />
 
       {!isLoading && !error && hasMore ? (
-        <Box>
-          <Button variant="outline" onClick={loadMore} disabled={isLoadingMore}>
-            {isLoadingMore ? 'Loading more...' : 'Load more'}
-          </Button>
-        </Box>
+        <>
+          <div ref={loadMoreSentinelRef} className={styles.loadMoreSentinel} />
+          {isLoadingMore ? (
+            <Box display="flex" justifyContent="center" paddingY={2}>
+              <Loader size="md" intent="neutral" />
+            </Box>
+          ) : null}
+        </>
       ) : null}
     </Box>
   );

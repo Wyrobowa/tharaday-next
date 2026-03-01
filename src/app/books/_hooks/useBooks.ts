@@ -29,6 +29,7 @@ type BooksResponse = {
   items: BookRecord[];
   hasMore: boolean;
   nextCursor: string | null;
+  total: number | null;
 };
 
 function normalizeBooksResponse(data: unknown): BooksResponse {
@@ -37,6 +38,7 @@ function normalizeBooksResponse(data: unknown): BooksResponse {
       items: data as BookRecord[],
       hasMore: false,
       nextCursor: null,
+      total: null,
     };
   }
 
@@ -45,6 +47,7 @@ function normalizeBooksResponse(data: unknown): BooksResponse {
       items?: unknown;
       hasMore?: unknown;
       nextCursor?: unknown;
+      total?: unknown;
     };
 
     return {
@@ -54,6 +57,7 @@ function normalizeBooksResponse(data: unknown): BooksResponse {
       hasMore: Boolean(payload.hasMore),
       nextCursor:
         typeof payload.nextCursor === 'string' ? payload.nextCursor : null,
+      total: typeof payload.total === 'number' ? payload.total : null,
     };
   }
 
@@ -61,6 +65,7 @@ function normalizeBooksResponse(data: unknown): BooksResponse {
     items: [],
     hasMore: false,
     nextCursor: null,
+    total: null,
   };
 }
 
@@ -80,6 +85,7 @@ export function useBooks({
   const [error, setError] = useState<string | null>(null);
   const [hasMore, setHasMore] = useState(false);
   const [nextCursor, setNextCursor] = useState<string | null>(null);
+  const [total, setTotal] = useState<number | null>(null);
   const [resolvedRequestKey, setResolvedRequestKey] = useState('');
 
   const normalizedQuery = q.trim();
@@ -162,6 +168,7 @@ export function useBooks({
           setBooks(data.items);
           setHasMore(data.hasMore);
           setNextCursor(data.nextCursor);
+          setTotal(data.total);
           setError(null);
           setResolvedRequestKey(requestKey);
         }
@@ -172,6 +179,7 @@ export function useBooks({
           setBooks([]);
           setHasMore(false);
           setNextCursor(null);
+          setTotal(null);
           setResolvedRequestKey(requestKey);
         }
       });
@@ -199,6 +207,9 @@ export function useBooks({
         setBooks((prev) => [...prev, ...data.items]);
         setHasMore(data.hasMore);
         setNextCursor(data.nextCursor);
+        if (typeof data.total === 'number') {
+          setTotal(data.total);
+        }
       })
       .catch((err) => {
         setError(
@@ -218,6 +229,7 @@ export function useBooks({
     isLoadingMore,
     error: isLoading ? null : error,
     hasMore,
+    total,
     loadMore,
   };
 }
