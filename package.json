@@ -19,7 +19,7 @@
     "next": "^16",
     "react": "^19",
     "react-dom": "^19",
-    "tharaday": "^0.*"
+    "tharaday": "^0.5.4"
   },
   "devDependencies": {
     "@types/node": "^25",
