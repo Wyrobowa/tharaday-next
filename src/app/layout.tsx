@@ -1,10 +1,8 @@
 import type { Metadata } from 'next';
 import { Geist, Geist_Mono } from 'next/font/google';
-import './globals.css';
-import 'tharaday/styles.css';
-import { ReactNode } from 'react';
 
-import ClientLayout from './client-layout';
+import 'tharaday/styles.css';
+import './globals.css';
 
 const geistSans = Geist({
   variable: '--font-geist-sans',
@@ -18,18 +16,16 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: 'Tharaday Books',
-  description: 'Book marketplace and admin panel for Tharaday components',
+  description: 'Frontend application for Tharaday Books',
 };
 
 export default function RootLayout({
   children,
-}: Readonly<{
-  children: ReactNode;
-}>) {
+}: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="en" data-theme="sanzo-152-light">
       <body className={`${geistSans.variable} ${geistMono.variable}`}>
-        <ClientLayout>{children}</ClientLayout>
+        {children}
       </body>
     </html>
   );

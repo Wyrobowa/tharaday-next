@@ -9,6 +9,14 @@ const nextConfig: NextConfig = {
   trailingSlash: true,
   basePath,
   assetPrefix,
+  async rewrites() {
+    return [
+      {
+        source: '/api/:path*',
+        destination: 'https://tharaday-vercel.vercel.app/api/:path*',
+      },
+    ];
+  },
   images: {
     unoptimized: true,
   },
