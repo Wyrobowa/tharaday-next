@@ -3,7 +3,7 @@
 import { useMemo, useState } from 'react';
 
 import { BookRecord } from '../types';
-import { getAuthorName } from '../utils';
+import { getAuthorName, getBookTitle } from '../utils';
 
 type FilterOption = { value: string; label: string };
 
@@ -11,6 +11,7 @@ export function useBookFilters(books: BookRecord[]) {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedType, setSelectedType] = useState('');
   const [selectedStatus, setSelectedStatus] = useState('');
+  const [selectedPriority, setSelectedPriority] = useState('');
   const [selectedAuthor, setSelectedAuthor] = useState('');
   const [selectedSort, setSelectedSort] = useState('newest');
 
@@ -45,6 +46,20 @@ export function useBookFilters(books: BookRecord[]) {
     ];
   }, [books]);
 
+  const priorityOptions = useMemo<FilterOption[]>(() => {
+    const uniquePriorities = Array.from(
+      new Set(books.map((book) => book.priority).filter(Boolean)),
+    ) as string[];
+
+    return [
+      { value: '', label: 'All priorities' },
+      ...uniquePriorities.map((priority) => ({
+        value: priority,
+        label: priority,
+      })),
+    ];
+  }, [books]);
+
   const sortOptions = useMemo<FilterOption[]>(
     () => [
       { value: 'newest', label: 'Newest first' },
@@ -64,23 +79,33 @@ export function useBookFilters(books: BookRecord[]) {
 
       const matchesQuery =
         normalizedQuery.length === 0 ||
-        book.name.toLowerCase().includes(normalizedQuery) ||
-        authorName.includes(normalizedQuery);
+        getBookTitle(book).toLowerCase().includes(normalizedQuery) ||
+        authorName.includes(normalizedQuery) ||
+        (book.description || '').toLowerCase().includes(normalizedQuery) ||
+        (book.publisher || '').toLowerCase().includes(normalizedQuery);
 
       const matchesType = !selectedType || book.type === selectedType;
       const matchesStatus = !selectedStatus || book.status === selectedStatus;
+      const matchesPriority =
+        !selectedPriority || book.priority === selectedPriority;
       const matchesAuthor =
         !selectedAuthor || getAuthorName(book) === selectedAuthor;
 
-      return matchesQuery && matchesType && matchesStatus && matchesAuthor;
+      return (
+        matchesQuery &&
+        matchesType &&
+        matchesStatus &&
+        matchesPriority &&
+        matchesAuthor
+      );
     });
 
     return [...onlyMatchingBooks].sort((a, b) => {
       if (selectedSort === 'title_asc') {
-        return a.name.localeCompare(b.name);
+        return getBookTitle(a).localeCompare(getBookTitle(b));
       }
       if (selectedSort === 'title_desc') {
-        return b.name.localeCompare(a.name);
+        return getBookTitle(b).localeCompare(getBookTitle(a));
       }
       if (selectedSort === 'author_asc') {
         return getAuthorName(a).localeCompare(getAuthorName(b));
@@ -95,6 +120,7 @@ export function useBookFilters(books: BookRecord[]) {
     searchQuery,
     selectedType,
     selectedStatus,
+    selectedPriority,
     selectedAuthor,
     selectedSort,
   ]);
@@ -103,6 +129,7 @@ export function useBookFilters(books: BookRecord[]) {
     setSearchQuery('');
     setSelectedType('');
     setSelectedStatus('');
+    setSelectedPriority('');
     setSelectedAuthor('');
     setSelectedSort('newest');
   };
@@ -111,16 +138,19 @@ export function useBookFilters(books: BookRecord[]) {
     searchQuery,
     selectedType,
     selectedStatus,
+    selectedPriority,
     selectedAuthor,
     selectedSort,
     typeOptions,
     statusOptions,
+    priorityOptions,
     authorOptions,
     sortOptions,
     filteredBooks,
     setSearchQuery,
     setSelectedType,
     setSelectedStatus,
+    setSelectedPriority,
     setSelectedAuthor,
     setSelectedSort,
     clearFilters,

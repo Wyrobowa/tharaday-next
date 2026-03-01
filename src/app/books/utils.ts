@@ -7,3 +7,17 @@ export function getAuthorName(book: BookRecord) {
 
   return name || 'Unknown author';
 }
+
+export function getBookTitle(book: BookRecord) {
+  const normalizedTitle = book.title?.trim();
+  if (normalizedTitle) {
+    return normalizedTitle;
+  }
+
+  const legacyName = book.name?.trim();
+  if (legacyName) {
+    return legacyName;
+  }
+
+  return 'Untitled';
+}

@@ -5,7 +5,7 @@ import { useMemo } from 'react';
 import { Badge, Box, Button, Card, CardContent, Text } from 'tharaday';
 
 import { useBooks } from '../../books/_hooks/useBooks';
-import { getAuthorName } from '../../books/utils';
+import { getAuthorName, getBookTitle } from '../../books/utils';
 
 export function BookPageClient() {
   const searchParams = useSearchParams();
@@ -63,18 +63,40 @@ export function BookPageClient() {
           <CardContent>
             <Box display="flex" flexDirection="column" gap={3}>
               <Text variant="h2" weight="bold">
-                {book.name}
+                {getBookTitle(book)}
               </Text>
 
               <Text variant="body-md" color="subtle">
                 {getAuthorName(book) || 'Unknown author'}
               </Text>
 
+              {book.description ? (
+                <Text variant="body-md">{book.description}</Text>
+              ) : null}
+
               <Box display="flex" gap={2}>
                 <Badge intent="info">{book.type || 'Unknown type'}</Badge>
                 <Badge intent="success">
                   {book.status || 'Unknown status'}
                 </Badge>
+                <Badge intent="info">
+                  {book.priority || 'Unknown priority'}
+                </Badge>
+              </Box>
+
+              <Box display="flex" flexDirection="column" gap={1}>
+                <Text variant="body-sm" color="subtle">
+                  Publisher: {book.publisher || 'Unknown'}
+                </Text>
+                <Text variant="body-sm" color="subtle">
+                  Publisher country: {book.publisher_country || 'Unknown'}
+                </Text>
+                <Text variant="body-sm" color="subtle">
+                  Author country: {book.author_country || 'Unknown'}
+                </Text>
+                <Text variant="body-sm" color="subtle">
+                  Pages: {book.pages ?? 'N/A'}
+                </Text>
               </Box>
 
               <Box>

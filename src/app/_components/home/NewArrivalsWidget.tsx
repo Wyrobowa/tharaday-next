@@ -7,12 +7,17 @@ import { getApiUrl } from '@/consts/api';
 
 type BookRecord = {
   id: number;
-  name: string;
+  title: string;
+  name?: string | null;
+  description: string | null;
   tag_id: number | null;
+  pages: number | null;
   type: string | null;
   status: string | null;
+  priority: string | null;
   author_first_name: string | null;
   author_last_name: string | null;
+  publisher: string | null;
 };
 
 export function NewArrivalsWidget() {
@@ -98,16 +103,32 @@ export function NewArrivalsWidget() {
                   paddingY={2}
                 >
                   <Text variant="body-lg" weight="bold">
-                    {book.name}
+                    {book.title || book.name || 'Untitled'}
                   </Text>
                   <Text variant="body-sm" color="subtle">
                     {authorName || 'Unknown author'}
                   </Text>
+                  {book.description ? (
+                    <Text variant="body-sm" color="subtle">
+                      {book.description}
+                    </Text>
+                  ) : null}
                   <Box display="flex" gap={2}>
                     <Badge intent="info">{book.type || 'New Arrival'}</Badge>
                     <Badge intent="success">
                       {book.status || 'Unknown status'}
                     </Badge>
+                    <Badge intent="info">
+                      {book.priority || 'Unknown priority'}
+                    </Badge>
+                  </Box>
+                  <Box display="flex" gap={2}>
+                    <Text variant="body-sm" color="subtle">
+                      {book.publisher || 'Unknown publisher'}
+                    </Text>
+                    <Text variant="body-sm" color="subtle">
+                      {book.pages ? `${book.pages} pages` : 'Pages N/A'}
+                    </Text>
                   </Box>
                 </Box>
               );

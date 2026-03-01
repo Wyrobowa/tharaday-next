@@ -1,7 +1,7 @@
 import { Suspense } from 'react';
 import { Box, Text } from 'tharaday';
 
-import { BookPageClient } from './BookPageClient';
+import { BookPageClient } from './_components/BookPageClient';
 
 function LoadingState() {
   return (

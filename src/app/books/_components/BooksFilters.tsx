@@ -9,15 +9,18 @@ type BooksFiltersProps = {
   searchQuery: string;
   selectedType: string;
   selectedStatus: string;
+  selectedPriority: string;
   selectedAuthor: string;
   selectedSort: string;
   typeOptions: Option[];
   statusOptions: Option[];
+  priorityOptions: Option[];
   authorOptions: Option[];
   sortOptions: Option[];
   onSearchQueryChange: (value: string) => void;
   onSelectedTypeChange: (value: string) => void;
   onSelectedStatusChange: (value: string) => void;
+  onSelectedPriorityChange: (value: string) => void;
   onSelectedAuthorChange: (value: string) => void;
   onSelectedSortChange: (value: string) => void;
   onClear: () => void;
@@ -27,15 +30,18 @@ export function BooksFilters({
   searchQuery,
   selectedType,
   selectedStatus,
+  selectedPriority,
   selectedAuthor,
   selectedSort,
   typeOptions,
   statusOptions,
+  priorityOptions,
   authorOptions,
   sortOptions,
   onSearchQueryChange,
   onSelectedTypeChange,
   onSelectedStatusChange,
+  onSelectedPriorityChange,
   onSelectedAuthorChange,
   onSelectedSortChange,
   onClear,
@@ -71,7 +77,7 @@ export function BooksFilters({
       {areAdvancedFiltersVisible ? (
         <Box
           display="grid"
-          gridTemplateColumns="repeat(5, minmax(0, 1fr))"
+          gridTemplateColumns="repeat(6, minmax(0, 1fr))"
           gap={3}
           alignItems="flex-end"
         >
@@ -86,6 +92,12 @@ export function BooksFilters({
             value={selectedStatus}
             options={statusOptions}
             onChange={(event) => onSelectedStatusChange(event.target.value)}
+          />
+          <Select
+            label="Priority"
+            value={selectedPriority}
+            options={priorityOptions}
+            onChange={(event) => onSelectedPriorityChange(event.target.value)}
           />
           <Select
             label="Author"
