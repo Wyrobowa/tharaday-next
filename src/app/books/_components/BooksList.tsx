@@ -5,6 +5,7 @@ import { BookCover } from '@/app/_components/BookCover';
 
 import { BookRecord } from '../types';
 import { getAuthorName, getBookTitle } from '../utils';
+import styles from './BooksList.module.css';
 
 type BooksListProps = {
   books: BookRecord[];
@@ -20,7 +21,7 @@ export function BooksList({ books }: BooksListProps) {
           <Link
             key={book.id}
             href={`/book?id=${book.id}`}
-            style={{ color: 'inherit', textDecoration: 'none' }}
+            className={styles.bookLink}
           >
             <Card bordered shadow="sm">
               <CardContent>
@@ -36,7 +37,7 @@ export function BooksList({ books }: BooksListProps) {
                     display="flex"
                     flexDirection="column"
                     gap={2}
-                    style={{ flex: 1 }}
+                    className={styles.bookContent}
                   >
                     <Text variant="h4" weight="bold">
                       {getBookTitle(book)}

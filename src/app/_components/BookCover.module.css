@@ -1,0 +1,115 @@
+.root {
+  border-radius: 12px;
+  color: #fff;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 12px;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.22);
+  border: 1px solid rgba(255, 255, 255, 0.26);
+  min-width: 120px;
+  flex-shrink: 0;
+}
+
+.root::before {
+  content: '';
+  position: absolute;
+  inset: -30% -45% auto auto;
+  width: 90px;
+  height: 90px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.22);
+  filter: blur(1px);
+  pointer-events: none;
+}
+
+.sizeSm,
+.sizeMd {
+  width: 120px;
+  height: 180px;
+}
+
+.sizeLg {
+  width: 220px;
+  height: 330px;
+  min-width: 220px;
+}
+
+.textWrap {
+  z-index: 1;
+}
+
+.title {
+  line-height: 1.2;
+  text-shadow: 0 1px 8px rgba(0, 0, 0, 0.25);
+}
+
+.meta {
+  z-index: 1;
+}
+
+.badge {
+  display: inline-block;
+  width: fit-content;
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.15);
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  font-size: 12px;
+}
+
+.author {
+  opacity: 0.95;
+  text-shadow: 0 1px 6px rgba(0, 0, 0, 0.2);
+  font-size: 12px;
+}
+
+.color0 {
+  background: linear-gradient(145deg, hsl(0 70% 46%), hsl(36 62% 30%));
+}
+
+.color1 {
+  background: linear-gradient(145deg, hsl(24 70% 46%), hsl(60 62% 30%));
+}
+
+.color2 {
+  background: linear-gradient(145deg, hsl(48 70% 46%), hsl(84 62% 30%));
+}
+
+.color3 {
+  background: linear-gradient(145deg, hsl(72 70% 46%), hsl(108 62% 30%));
+}
+
+.color4 {
+  background: linear-gradient(145deg, hsl(96 70% 46%), hsl(132 62% 30%));
+}
+
+.color5 {
+  background: linear-gradient(145deg, hsl(120 70% 46%), hsl(156 62% 30%));
+}
+
+.color6 {
+  background: linear-gradient(145deg, hsl(144 70% 46%), hsl(180 62% 30%));
+}
+
+.color7 {
+  background: linear-gradient(145deg, hsl(168 70% 46%), hsl(204 62% 30%));
+}
+
+.color8 {
+  background: linear-gradient(145deg, hsl(192 70% 46%), hsl(228 62% 30%));
+}
+
+.color9 {
+  background: linear-gradient(145deg, hsl(216 70% 46%), hsl(252 62% 30%));
+}
+
+.color10 {
+  background: linear-gradient(145deg, hsl(240 70% 46%), hsl(276 62% 30%));
+}
+
+.color11 {
+  background: linear-gradient(145deg, hsl(264 70% 46%), hsl(300 62% 30%));
+}

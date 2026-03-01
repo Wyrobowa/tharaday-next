@@ -1,92 +1,80 @@
 import { Box, Text } from 'tharaday';
 
+import styles from './BookCover.module.css';
+
 type BookCoverProps = {
   id: number;
   title: string;
   author?: string;
+  badge?: string;
   size?: 'sm' | 'md' | 'lg';
 };
 
-const BOOK_COVER_SIZES = {
-  sm: { width: 120, height: 180, titleVariant: 'body-sm' as const },
-  md: { width: 120, height: 180, titleVariant: 'body-sm' as const },
-  lg: { width: 220, height: 330, titleVariant: 'h4' as const },
-} as const;
+const COLOR_CLASSES = [
+  styles.color0,
+  styles.color1,
+  styles.color2,
+  styles.color3,
+  styles.color4,
+  styles.color5,
+  styles.color6,
+  styles.color7,
+  styles.color8,
+  styles.color9,
+  styles.color10,
+  styles.color11,
+] as const;
 
 function clampWords(value: string, wordsCount: number) {
   return value.trim().split(/\s+/).slice(0, wordsCount).join(' ');
 }
 
-function buildCoverColors(seedValue: number) {
-  const hue = (seedValue * 47) % 360;
-  const hueAlt = (hue + 36) % 360;
-
-  return {
-    background: `linear-gradient(145deg, hsl(${hue} 70% 46%), hsl(${hueAlt} 62% 30%))`,
-    accent: `hsl(${(hue + 12) % 360} 85% 92% / 0.2)`,
-  };
-}
-
-export function BookCover({ id, title, author, size = 'md' }: BookCoverProps) {
+export function BookCover({
+  id,
+  title,
+  author,
+  badge,
+  size = 'md',
+}: BookCoverProps) {
   const seed = id || title.length || 1;
-  const colors = buildCoverColors(seed);
-  const sizeStyle = BOOK_COVER_SIZES[size];
+  const colorClass = COLOR_CLASSES[seed % COLOR_CLASSES.length];
+  const sizeClass =
+    size === 'lg'
+      ? styles.sizeLg
+      : size === 'sm'
+        ? styles.sizeSm
+        : styles.sizeMd;
 
   return (
-    <Box
-      style={{
-        width: `${sizeStyle.width}px`,
-        height: `${sizeStyle.height}px`,
-        minWidth: `${sizeStyle.width}px`,
-        flexShrink: 0,
-        borderRadius: '12px',
-        background: colors.background,
-        color: '#fff',
-        display: 'flex',
-        flexDirection: 'column',
-        justifyContent: 'space-between',
-        padding: '12px',
-        position: 'relative',
-        overflow: 'hidden',
-        boxShadow: '0 10px 24px rgba(0, 0, 0, 0.22)',
-        border: '1px solid rgba(255, 255, 255, 0.26)',
-      }}
-    >
+    <Box className={`${styles.root} ${colorClass} ${sizeClass}`}>
       <Box
-        style={{
-          position: 'absolute',
-          inset: '-30% -45% auto auto',
-          width: '90px',
-          height: '90px',
-          borderRadius: '999px',
-          background: colors.accent,
-          filter: 'blur(1px)',
-          pointerEvents: 'none',
-        }}
-      />
-
-      <Box display="flex" flexDirection="column" gap={1} style={{ zIndex: 1 }}>
+        display="flex"
+        flexDirection="column"
+        gap={1}
+        className={styles.textWrap}
+      >
         <Text
-          variant={sizeStyle.titleVariant}
+          variant={size === 'lg' ? 'h4' : 'body-sm'}
           weight="bold"
-          style={{
-            lineHeight: 1.2,
-            textShadow: '0 1px 8px rgba(0, 0, 0, 0.25)',
-          }}
+          className={styles.title}
         >
           {clampWords(title || 'Untitled', size === 'sm' ? 5 : 8)}
         </Text>
       </Box>
 
-      <Box display="flex" flexDirection="column" gap={1} style={{ zIndex: 1 }}>
-        <Text
-          variant="body-sm"
-          style={{
-            opacity: 0.95,
-            textShadow: '0 1px 6px rgba(0, 0, 0, 0.2)',
-            fontSize: '12px',
-          }}
-        >
+      <Box
+        display="flex"
+        flexDirection="column"
+        gap={1}
+        className={styles.meta}
+      >
+        {badge ? (
+          <Text variant="body-sm" className={styles.badge}>
+            {badge}
+          </Text>
+        ) : null}
+
+        <Text variant="body-sm" className={styles.author}>
           {clampWords(author || 'Unknown author', 4)}
         </Text>
       </Box>

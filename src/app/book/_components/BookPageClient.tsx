@@ -6,6 +6,7 @@ import { Badge, Box, Button, Card, CardContent, Text } from 'tharaday';
 
 import { BookCover } from '@/app/_components/BookCover';
 
+import styles from './BookPageClient.module.css';
 import { useBooks } from '../../books/_hooks/useBooks';
 import { getAuthorName, getBookTitle } from '../../books/utils';
 
@@ -76,7 +77,7 @@ export function BookPageClient() {
                 display="flex"
                 flexDirection="column"
                 gap={3}
-                style={{ flex: 1 }}
+                className={styles.detailsContent}
               >
                 <Text variant="h2" weight="bold">
                   {getBookTitle(book)}

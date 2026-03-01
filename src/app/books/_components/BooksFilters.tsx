@@ -3,6 +3,8 @@
 import { useState } from 'react';
 import { Box, Button, Input, Select } from 'tharaday';
 
+import styles from './BooksFilters.module.css';
+
 type Option = { value: string; label: string };
 
 type BooksFiltersProps = {
@@ -63,7 +65,7 @@ export function BooksFilters({
           variant="subtle"
           intent="neutral"
           size="sm"
-          style={{ alignSelf: 'flex-start' }}
+          className={styles.advancedToggle}
           onClick={() =>
             setAreAdvancedFiltersVisible(!areAdvancedFiltersVisible)
           }

@@ -1,0 +1,8 @@
+.bookLink {
+  color: inherit;
+  text-decoration: none;
+}
+
+.bookContent {
+  flex: 1;
+}

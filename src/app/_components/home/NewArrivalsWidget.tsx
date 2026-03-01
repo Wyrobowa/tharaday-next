@@ -9,6 +9,8 @@ import { BookRecord } from '@/app/books/types';
 import { getAuthorName, getBookTitle } from '@/app/books/utils';
 import { getApiUrl } from '@/consts/api';
 
+import styles from './NewArrivalsWidget.module.css';
+
 export function NewArrivalsWidget() {
   const [books, setBooks] = useState<BookRecord[]>([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -113,18 +115,7 @@ export function NewArrivalsWidget() {
             </Text>
           ) : null}
 
-          <div
-            ref={carouselRef}
-            style={{
-              display: 'grid',
-              gap: '12px',
-              gridAutoFlow: 'column',
-              gridAutoColumns: 'minmax(220px, 240px)',
-              overflowX: 'auto',
-              scrollSnapType: 'x mandatory',
-              paddingBottom: '6px',
-            }}
-          >
+          <div ref={carouselRef} className={styles.carousel}>
             {newArrivals.map((book) => {
               const authorName = getAuthorName(book);
 
@@ -132,13 +123,9 @@ export function NewArrivalsWidget() {
                 <Link
                   key={book.id}
                   href={`/book?id=${book.id}`}
-                  style={{
-                    color: 'inherit',
-                    textDecoration: 'none',
-                    scrollSnapAlign: 'start',
-                  }}
+                  className={styles.carouselItemLink}
                 >
-                  <Card bordered shadow="sm" style={{ height: '100%' }}>
+                  <Card bordered shadow="sm" className={styles.carouselCard}>
                     <CardContent>
                       <Box display="flex" flexDirection="column" gap={2}>
                         <BookCover
