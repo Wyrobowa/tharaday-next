@@ -18,8 +18,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: 'Tharaday Books',
-  description: 'Frontend application for Tharaday Books',
+  title: 'Bookstore',
+  description: 'Frontend application for Bookstore',
 };
 
 export default function RootLayout({

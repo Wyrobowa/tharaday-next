@@ -26,7 +26,7 @@ export default function ClientShell({
     syncUserFromStorage();
 
     const handleStorage = (event: StorageEvent) => {
-      if (!event.key || event.key === 'tharaday_auth_session') {
+      if (!event.key || event.key === 'bookstore_auth_session') {
         syncUserFromStorage();
       }
     };
@@ -59,7 +59,7 @@ export default function ClientShell({
 
   return (
     <AppLayout
-      headerTitle="Tharaday Books"
+      headerTitle="Bookstore"
       maxWidth="90%"
       user={userName ? { name: userName } : undefined}
       navItems={navItems}
