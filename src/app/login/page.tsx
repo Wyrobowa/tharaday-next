@@ -82,19 +82,6 @@ export default function LoginPage() {
                 </Button>
               </Box>
             </form>
-
-            <Box display="flex" alignItems="center" gap={2}>
-              <Text variant="body-sm" color="subtle">
-                No account yet?
-              </Text>
-              <Button
-                size="sm"
-                variant="subtle"
-                onClick={() => router.push('/signup')}
-              >
-                Create account
-              </Button>
-            </Box>
           </Box>
         </CardContent>
       </Card>

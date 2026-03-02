@@ -61,7 +61,6 @@ export default function ClientShell({
       activeNavId={activeNavId}
       onNavItemClick={(id) => router.push(id === 'home' ? '/' : `/${id}`)}
       onLogin={() => router.push('/login')}
-      onCreateAccount={() => router.push('/signup')}
       onLogout={() => {
         clearAuthSession();
         setUserName(null);
