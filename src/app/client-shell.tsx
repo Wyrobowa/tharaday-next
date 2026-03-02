@@ -47,19 +47,31 @@ export default function ClientShell({
   const activeNavId =
     normalizedPathname === '/books' || normalizedPathname === '/book'
       ? 'books'
-      : 'home';
+      : normalizedPathname === '/account'
+        ? 'account'
+        : 'home';
+
+  const navItems = [
+    { id: 'home', label: 'Home' },
+    { id: 'books', label: 'Books' },
+    ...(userName ? [{ id: 'account', label: 'Account' }] : []),
+  ];
 
   return (
     <AppLayout
       headerTitle="Tharaday Books"
       maxWidth="90%"
       user={userName ? { name: userName } : undefined}
-      navItems={[
-        { id: 'home', label: 'Home' },
-        { id: 'books', label: 'Books' },
-      ]}
+      navItems={navItems}
       activeNavId={activeNavId}
-      onNavItemClick={(id) => router.push(id === 'home' ? '/' : `/${id}`)}
+      onNavItemClick={(id) => {
+        if (id === 'home') {
+          router.push('/');
+          return;
+        }
+
+        router.push(`/${id}`);
+      }}
       onLogin={() => router.push('/login')}
       onLogout={() => {
         clearAuthSession();
