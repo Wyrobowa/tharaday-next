@@ -19,7 +19,7 @@
     "next": "^16",
     "react": "^19",
     "react-dom": "^19",
-    "tharaday": "^0.5.7"
+    "tharaday": "^0.5.11"
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",
@@ -32,6 +32,6 @@
     "eslint-plugin-prettier": "^5",
     "prettier": "^3",
     "typescript": "^5",
-    "typescript-eslint": "^8.56.1"
+    "typescript-eslint": "^8.57.0"
   }
 }
